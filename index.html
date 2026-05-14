@@ -41,14 +41,57 @@
     .lang-flag{font-size:1rem;width:20px;text-align:center}
     .typewriter{overflow:hidden;white-space:nowrap;border-right:2px solid rgba(255,255,255,0.3);animation:typewriter 3s steps(40) forwards,blink-caret .75s step-end infinite;display:inline-block;max-width:100%}
     @keyframes blink-caret{from,to{border-color:transparent}50%{border-color:rgba(255,255,255,0.3)}}
-    .soundscape-btn{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);transition:all .3s;font-size:1.1rem}
+    .soundscape-btn{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);transition:all .3s;font-size:1.1rem;position:relative}
     .soundscape-btn:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.3);box-shadow:0 0 20px rgba(139,92,246,0.2)}
     .soundscape-btn.active{background:rgba(139,92,246,0.2);border-color:rgba(139,92,246,0.4);box-shadow:0 0 20px rgba(139,92,246,0.3)}
+    .soundscape-btn .vinyl-icon{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#333 0%,#111 30%,#555 50%,#111 70%,#333 100%);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;position:relative}
+    .soundscape-btn .vinyl-icon::after{content:'';position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.2)}
+    .soundscape-btn .vinyl-icon.spinning{animation:spin 2s linear infinite}
+    .soundscape-btn .music-note{font-size:1.1rem;opacity:0.6}
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
     #particle-canvas{position:fixed;inset:0;pointer-events:none;z-index:50}
     #loading-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:9999;transition:opacity .8s ease}
     #loading-screen.hidden{opacity:0;pointer-events:none}
     .loading-text{color:rgba(255,255,255,0.3);font-size:0.7rem;letter-spacing:0.3em;margin-top:24px;font-weight:300;animation:fadeIn 1s ease-out 0.5s both}
     .bg-crossfade{transition:background 2s ease}
+    /* Whalien 52 */
+    .whale-container{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden}
+    .whale-svg{position:absolute;bottom:15%;width:200px;height:auto;opacity:0;animation:whaleSwim 12s ease-in-out forwards;filter:drop-shadow(0 0 30px rgba(100,149,237,0.3))}
+    .whale-svg.pulsing{animation:whaleSwim 12s ease-in-out forwards,whalePulse 0.8s ease-in-out infinite}
+    @keyframes whaleSwim{0%{left:-250px;opacity:0;transform:scale(0.5)}10%{opacity:0.15}50%{left:50%;transform:translateX(-50%) scale(1);opacity:0.2}90%{opacity:0.15}100%{left:calc(100% + 250px);opacity:0;transform:scale(0.5)}}
+    @keyframes whalePulse{0%,100%{opacity:0.15}50%{opacity:0.3}}
+    /* Confetti */
+    .confetti-container{position:fixed;inset:0;pointer-events:none;z-index:100;overflow:hidden}
+    .petal{position:absolute;width:12px;height:12px;border-radius:50% 50% 50% 0;opacity:0;animation:petalFall var(--fall-duration,3s) ease-in forwards;top:-20px;left:var(--x,50%)}
+    @keyframes petalFall{0%{transform:translateY(0) rotate(0deg) scale(0);opacity:0}10%{opacity:0.9}100%{transform:translateY(100vh) rotate(720deg) scale(1);opacity:0}}
+    /* Cinema Fade */
+    .cinema-fade-enter{opacity:0;transform:scale(0.95);filter:blur(10px)}
+    .cinema-fade-enter-active{opacity:1;transform:scale(1);filter:blur(0px);transition:all 0.8s cubic-bezier(0.22,1,0.36,1)}
+    .cinema-fade-exit{opacity:1;transform:scale(1);filter:blur(0px)}
+    .cinema-fade-exit-active{opacity:0;transform:scale(1.05);filter:blur(10px);transition:all 0.6s cubic-bezier(0.22,1,0.36,1)}
+    /* Proof era matte texture */
+    .proof-matte{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.02;background-image:url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)' opacity='0.03'/%3E%3C/svg%3E")}
+    /* Proof Easter Egg Overlay */
+    .proof-overlay{position:fixed;inset:0;z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,10,30,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);overflow:hidden}
+    .proof-overlay .title{font-family:'Playfair Display',Georgia,serif;font-size:2.5rem;font-weight:700;color:#fff;text-align:center;letter-spacing:0.05em;z-index:10;text-shadow:0 0 40px rgba(139,92,246,0.5)}
+    .proof-overlay .subtitle{font-family:'Inter',sans-serif;font-size:0.8rem;color:rgba(255,255,255,0.4);letter-spacing:0.3em;margin-top:12px;z-index:10;text-transform:uppercase}
+    .proof-overlay .close-btn{position:absolute;top:24px;right:24px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);font-size:1.2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;z-index:20}
+    .proof-overlay .close-btn:hover{background:rgba(255,255,255,0.18);color:#fff}
+    .star-constellation{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5}
+    .star-7{position:absolute;width:6px;height:6px;border-radius:50%;background:#DDA0DD;box-shadow:0 0 20px rgba(221,160,221,0.8),0 0 60px rgba(221,160,221,0.3);animation:starPulse 2s ease-in-out infinite}
+    .star-7:nth-child(1){top:35%;left:42%}.star-7:nth-child(2){top:30%;left:50%}.star-7:nth-child(3){top:35%;left:58%}.star-7:nth-child(4){top:45%;left:46%}.star-7:nth-child(5){top:45%;left:54%}.star-7:nth-child(6){top:55%;left:42%}.star-7:nth-child(7){top:55%;left:58%}
+    .star-7:nth-child(1){animation-delay:0s}.star-7:nth-child(2){animation-delay:0.15s}.star-7:nth-child(3){animation-delay:0.3s}.star-7:nth-child(4){animation-delay:0.45s}.star-7:nth-child(5){animation-delay:0.6s}.star-7:nth-child(6){animation-delay:0.75s}.star-7:nth-child(7){animation-delay:0.9s}
+    .star-7::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:rgba(221,160,221,0.15);animation:starGlow 2s ease-in-out infinite}
+    .star-7:nth-child(1)::after{animation-delay:0s}.star-7:nth-child(2)::after{animation-delay:0.15s}.star-7:nth-child(3)::after{animation-delay:0.3s}.star-7:nth-child(4)::after{animation-delay:0.45s}.star-7:nth-child(5)::after{animation-delay:0.6s}.star-7:nth-child(6)::after{animation-delay:0.75s}.star-7:nth-child(7)::after{animation-delay:0.9s}
+    @keyframes starPulse{0%,100%{transform:scale(1);opacity:0.8}50%{transform:scale(1.5);opacity:1}}
+    @keyframes starGlow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.3}50%{transform:translate(-50%,-50%) scale(2);opacity:0.6}}
+    .whale-silhouette{position:absolute;width:120px;height:auto;opacity:0;pointer-events:none;animation:whaleFloat 8s ease-in-out forwards}
+    .whale-silhouette:nth-child(1){left:10%;bottom:-10%;animation-delay:0.5s;width:100px}
+    .whale-silhouette:nth-child(2){left:30%;bottom:-15%;animation-delay:2s;width:140px}
+    .whale-silhouette:nth-child(3){left:55%;bottom:-8%;animation-delay:3.5s;width:90px}
+    .whale-silhouette:nth-child(4){left:75%;bottom:-12%;animation-delay:5s;width:130px}
+    .whale-silhouette:nth-child(5){left:85%;bottom:-5%;animation-delay:1.5s;width:80px}
+    @keyframes whaleFloat{0%{transform:translateY(0) scale(0.5);opacity:0}20%{opacity:0.15}60%{opacity:0.1}100%{transform:translateY(-110vh) scale(1);opacity:0}}
   </style>
 </head>
 <body>
@@ -78,16 +121,16 @@
 
     const TRANSLATIONS={
       en:{
-        ui:{next:"Next",restart:"Remigrate",result:"Reveal Soul",lang:"English",start:"Begin Your Journey",again:"Take the Test Again",analysis:"Read Soul Analysis",back:"Back to Result",healing:"Healing Track",youtube:"Watch on YouTube",cont:"The story continues...",calc:"Calculating your soul archetype...",soundscape:"Soundscape",tagline:"Discover your BTS soul archetype through a cinematic 13-question journey across 8 eras.",title:"Echoes of the Microcosmos",subtitle:"A BTS Soul-Migration Test",score:"Your Soul Archetype",quotes:["The most beautiful moment in life is...","You never walk alone","Life goes on","The best is yet to come"]},
+        ui:{next:"Next",restart:"Remigrate",result:"Reveal Soul",lang:"English",start:"Begin Your Journey",again:"Take the Test Again",analysis:"Read Soul Analysis",back:"Back to Result",healing:"Healing Track",youtube:"Watch on YouTube",cont:"The story continues...",calc:"Calculating your soul archetype...",soundscape:"Soundscape",tagline:"Discover your BTS soul archetype through a cinematic 13-question journey across 8 eras.",title:"Echoes of the Microcosmos",subtitle:"A BTS Soul-Migration Test",score:"Your Soul Archetype",bulletproof:"We Are Bulletproof",quotes:["The most beautiful moment in life is...","You never walk alone","Life goes on","The best is yet to come"],hyyh:{archetype:"Ethereal Youth (HYYH)",analysis:"Your soul belongs to the 'Most Beautiful Moment in Life' — that fleeting, bittersweet chapter where youth is both a blessing and a curse. Like the narrative of 'I Need U' and 'Run,' you understand that the most beautiful moments are often the most painful. You feel things deeply, perhaps too deeply, and that sensitivity is both your greatest gift and your heaviest burden. The 'Sensitive Idealist' archetype is defined by a longing for meaning in a world that often feels chaotic. You see beauty in the mundane — the way light hits a window, the sound of rain, the texture of an old photograph. Your journey mirrors the HYYH narrative — a search for identity in the liminal space between childhood and adulthood.",quote_jimin:"I realized this was our story too — the struggle, fear, and longing of youth. It wasn't just a concept; it was us.",quote_v:"I wanted to capture a mood that felt like a momentary masterpiece. Something that would make people stop and think, 'This is beautiful.'",healing_track:"Spring Day"}},
         results:{
-          Rebel:{title:"The Unyielding Voice",desc:"You are a 'Challenger' who guards original dreams against societal pressure.",track:"No More Dream"},
-          HYYH:{title:"The Fragile Dreamer",desc:"You find beauty in growth pains and the 'most beautiful and painful' duality of youth.",track:"Spring Day"},
-          Wings:{title:"The Awakening Soul",desc:"You are a 'Philosopher' navigating the abyss between temptation and maturity.",track:"Blood Sweat & Tears"},
-          LY:{title:"The Sincere Healer",desc:"You have found the 'Epiphany' that loving oneself is the start of true love.",track:"Epiphany"},
-          MOTS:{title:"The Map-Maker",desc:"You seek the 'Map of the Soul,' integrating your Persona and Shadow.",track:"Black Swan"},
-          BE:{title:"The Warm Companion",desc:"You find comfort in the 'Life Goes On' resilience of everyday life.",track:"Life Goes On"},
-          Proof:{title:"The Eternal Witness",desc:"You believe 'The Best is Yet to Come' and cherish the anthology of your history.",track:"Yet To Come"},
-          Solo:{title:"The Galaxy Explorer",desc:"You are an independent star exploring your own 'Indigo' universe.",track:"Wild Flower"}
+          Rebel:{title:"The Unyielding Voice",desc:"You are a 'Challenger' who guards original dreams against societal pressure.",track:"No More Dream",analysis:["Your soul resonates with the raw, unpolished energy of BTS's debut era. Like the boys who stood on that stage in 2013 with 'No More Dream,' you refuse to be boxed in by society's expectations. RM once said, 'Your dream is the map of your life,' and you've taken that literally — charting your own course even when the world told you to follow the beaten path.","The 'Rebellious Noir' archetype is marked by a fierce independence and an unshakeable belief in your own voice. You see through the illusions of the 'success criteria' that society tries to impose, much like the defiant stance in 'N.O' and 'We Are Bulletproof Pt.2.' Your strength lies in your ability to stand alone, to be the bulletproof shield for your own convictions.","Yet beneath that hardened exterior lies a vulnerability — the knowledge that rebellion is often born from pain. Suga once reflected, 'If you don't work hard, there won't be results,' and your journey has been one of relentless effort. Your challenge now is to channel that fire not just against what you oppose, but toward what you truly love."]},
+          HYYH:{title:"The Fragile Dreamer",desc:"You find beauty in growth pains and the 'most beautiful and painful' duality of youth.",track:"Spring Day",analysis:["You resonate with the HYYH Era. You find beauty in the 'most beautiful and painful' duality of life. You are navigating 'Growth Pain,' moving from the safety of the past toward an uncertain but radiant independence.","Your soul belongs to the 'Most Beautiful Moment in Life' — that fleeting, bittersweet chapter where youth is both a blessing and a curse. Like the narrative of 'I Need U' and 'Run,' you understand that the most beautiful moments are often the most painful. You feel things deeply, perhaps too deeply, and that sensitivity is both your greatest gift and your heaviest burden.","The 'Sensitive Idealist' archetype is defined by a longing for meaning in a world that often feels chaotic. You see beauty in the mundane — the way light hits a window, the sound of rain, the texture of an old photograph. V once said, 'It's okay to be sad. It's okay to not be okay,' and those words resonate with your core. You don't run from sadness; you sit with it, learn from it, and transform it into art."]},
+          Wings:{title:"The Awakening Soul",desc:"You are a 'Philosopher' navigating the abyss between temptation and maturity.",track:"Blood Sweat & Tears",analysis:["Your soul carries the weight of 'Blood Sweat & Tears' — the understanding that great beauty requires great sacrifice. You are drawn to the Baroque, to the ornate, to the things that are both sacred and profane. Like the members who explored their individual shadows in the 'Wings' solos, you are not afraid to look into the abyss and find art there.","The 'Passionate Alchemist' archetype transforms pain into power. You understand that temptation is not something to be feared but to be understood. Jungkook's 'Begin' speaks to your journey — the realization that love can be both salvation and destruction. You've tasted both, and you've learned that the only way out is through.","Your path is one of integration — bringing together the light and shadow, the sacred and the sensual. As RM reflected during this era, 'Pain is a gift. Without it, we wouldn't know joy.' Your challenge is to embrace the full spectrum of your humanity, to let your wings carry you not above the world, but deeper into it."]},
+          LY:{title:"The Sincere Healer",desc:"You have found the 'Epiphany' that loving oneself is the start of true love.",track:"Epiphany",analysis:["Your soul has been shaped by the journey from 'Love Yourself: Her' to 'Answer' — a complete arc of falling, healing, and rising. You understand that self-love is not a destination but a practice, a daily choice to look in the mirror and say, 'You are enough.' Like the narrative of 'Euphoria' and 'Epiphany,' you've learned that the person you've been waiting for is yourself.","The 'Radiant Healer' archetype shines with a gentle, holographic light. You have the rare ability to see the beauty in others, often before they see it in themselves. Jin's 'Epiphany' captures your essence: 'I'm the one I should love in this world.' You've learned that healing radiates outward — that by loving yourself, you give others permission to do the same.","Your journey is one of integration — bringing together the fragmented pieces of your identity into a coherent, beautiful whole. As RM said during the LY era, 'There is no answer. The answer is within you.' You carry this wisdom like a lantern, illuminating the path for others while continuing to walk your own."]},
+          MOTS:{title:"The Map-Maker",desc:"You seek the 'Map of the Soul,' integrating your Persona and Shadow.",track:"Black Swan",analysis:["Your soul is drawn to the depths — to the Jungian concepts that BTS so masterfully wove into their 'Map of the Soul' series. You understand that the persona is not a lie but a necessary interface with the world, and that the shadow is not an enemy but a teacher. 'Black Swan' speaks to your fear of losing your creative spark, and your determination to keep creating anyway.","The 'Philosophical Explorer' archetype is never satisfied with surface-level answers. You ask the hard questions: Who am I? What is my purpose? What am I afraid of? Like RM's intro 'Persona,' you grapple with the question, 'Who the hell am I?' — not as a crisis, but as a lifelong inquiry. Your strength is your intellectual curiosity and your willingness to sit with uncertainty.","Your journey is one of individuation — the process of becoming your true self. Suga's 'Shadow' captures your struggle: the fear of success, the weight of expectations, the desire to be both seen and hidden. But as the album teaches us, only by integrating our shadow can we become whole. Your path is not about perfection but about authenticity."]},
+          BE:{title:"The Warm Companion",desc:"You find comfort in the 'Life Goes On' resilience of everyday life.",track:"Life Goes On",analysis:["Your soul carries the quiet wisdom of the 'BE' era — an album born from a time of global pause and personal reflection. You understand that healing doesn't always come in grand gestures but in the small, sacred rituals of daily life. 'Life Goes On' is your anthem: a gentle reminder that even when the world stops, we find ways to keep going, together.","The 'Gentle Anchor' archetype is the friend everyone turns to in times of need. Like Jin's 'Moon' or Jungkook's 'Still With You,' you have a stabilizing presence that makes others feel safe. You find beauty in domesticity — in shared meals, in quiet conversations, in the comfort of being truly seen by someone who loves you.","Your journey has taught you that vulnerability is not weakness but the foundation of true connection. As RM said during the BE era, 'It's okay to say that you're not okay.' You've learned to hold space for your own pain and for others', creating a sanctuary of acceptance. Your gift is your ability to make the people around you feel at home."]},
+          Proof:{title:"The Eternal Witness",desc:"You believe 'The Best is Yet to Come' and cherish the anthology of your history.",track:"Yet To Come",analysis:["Your soul understands the weight of legacy. The 'Proof' anthology is not just a collection of songs but a testament to a journey — and you see your own life the same way. Every chapter, every struggle, every triumph is part of a larger narrative that you are still writing. 'Yet To Come' is your creed: the best moments are still ahead.","The 'Timeless Archivist' archetype honors the past while looking toward the future. You understand that where you come from shapes who you become, but it doesn't define where you're going. Like the members who looked back on their decade-long journey with gratitude and anticipation, you carry your history with grace, using it as a foundation rather than a cage.","Your journey is one of integration — bringing together all the versions of yourself into a coherent whole. As the members reflected in 'Proof,' the answer to 'Who am I?' is not a single moment but an entire lifetime of becoming. Your gift is your ability to see the through-line in your own story and to inspire others to find theirs."]},
+          Solo:{title:"The Galaxy Explorer",desc:"You are an independent star exploring your own 'Indigo' universe.",track:"Wild Flower",analysis:["Your soul resonates with the energy of 'Chapter 2' — the era where each member explored their individual artistry while remaining connected to the whole. You understand that true freedom is not about going alone but about knowing you can stand on your own while still choosing to be part of something larger. Like the members' solo journeys, you've learned that individuality and togetherness are not opposites but complements.","The 'Cosmic Weaver' archetype moves between worlds with grace. You've explored your own path — like J-Hope's 'Jack In The Box,' RM's 'Indigo,' Agust D's 'D-DAY,' or Jungkook's 'GOLDEN' — and you've discovered that your individual voice only grows stronger when shared. You are both a star and part of a constellation, shining alone and together.","Your journey is one of expansion — not away from your roots but outward from them. As RM said of 'Indigo,' 'I wanted to show my 20s as honestly as possible.' You too are documenting your own chapter, knowing that the most authentic story is one that embraces both the individual notes and the harmony they create together."]}
         },
         questions:[
           {text:"Facing the 'Success Criteria' on a chalkboard, you feel:",options:["Defiance — I'll rewrite my own rules.","Nostalgia — this struggle is part of my youth.","Pressure to mask who I really am.","A sense of passage — this too shall become history."]},
@@ -106,16 +149,16 @@
         ]
       },
       ko:{
-        ui:{next:"다음",restart:"다시 이동",result:"결과 보기",lang:"한국어",start:"여정 시작하기",again:"다시 테스트하기",analysis:"영혼 분석 읽기",back:"결과로 돌아가기",healing:"힐링 트랙",youtube:"YouTube에서 보기",cont:"이야기는 계속됩니다...",calc:"영혼 원형을 계산하는 중...",soundscape:"사운드스케이프",tagline:"13개의 질문으로 8개 시대를 거쳐 당신의 방탄소년단 영혼 원형을 발견하세요.",title:"Echoes of the Microcosmos",subtitle:"방탄소년단 영혼 이주 테스트",score:"당신의 영혼 원형",quotes:["인생에서 가장 아름다운 순간은...","혼자가 아니야","삶은 계속된다","최고의 순간은 아직 오지 않았다"]},
+        ui:{next:"다음",restart:"다시 이동",result:"결과 보기",lang:"한국어",start:"여정 시작하기",again:"다시 테스트하기",analysis:"영혼 분석 읽기",back:"결과로 돌아가기",healing:"힐링 트랙",youtube:"YouTube에서 보기",cont:"이야기는 계속됩니다...",calc:"영혼 원형을 계산하는 중...",soundscape:"사운드스케이프",tagline:"13개의 질문으로 8개 시대를 거쳐 당신의 방탄소년단 영혼 원형을 발견하세요.",title:"Echoes of the Microcosmos",subtitle:"방탄소년단 영혼 이주 테스트",score:"당신의 영혼 원형",bulletproof:"We Are Bulletproof",quotes:["인생에서 가장 아름다운 순간은...","혼자가 아니야","삶은 계속된다","최고의 순간은 아직 오지 않았다"],hyyh:{archetype:"화양연화 (Ethereal Youth)",analysis:"당신의 영혼은 '가장 아름다운 순간'에 속해 있습니다 — 청춘이 축복이자 저주인 덧없고 달콤쌉싸름한 장. 'I Need U'와 'Run'의 서사처럼, 가장 아름다운 순간이 가장 아프다는 것을 이해합니다. 당신은 깊이, 어쩌면 너무 깊이 느끼며, 그 예민함은 가장 큰 선물이자 가장 무거운 짐입니다. '민감한 이상주의자' 원형은 혼란스러운 세상에서 의미를 갈망하는 것으로 정의됩니다. 당신은 평범함 속에서 아름다움을 봅니다 — 빛이 창문에 닿는 방식, 빗소리, 오래된 사진의 질감. 당신의 여정은 HYYH 서사를 반영합니다 — 어린 시절과 성인기 사이의 경계 공간에서 정체성을 찾는 탐색.",quote_jimin:"이것이 우리의 이야기라는 것을 깨달았습니다 — 청춘의 투쟁, 두려움, 갈망. 단순한 콘셉트가 아니라, 바로 우리였습니다.",quote_v:"순간적인 걸작 같은 분위기를 포착하고 싶었습니다. 사람들이 멈춰 서서 '이거 아름답다'고 생각하게 만드는 무언가.",healing_track:"봄날 (Spring Day)"}},
         results:{
-          Rebel:{title:"굴하지 않는 목소리",desc:"당신은 사회적 압력에 맞서 초심을 지키는 '도전 활동가'입니다.",track:"No More Dream"},
-          HYYH:{title:"위태로운 드리머",desc:"당신은 청춘의 '가장 아름답고도 아픈' 이중성에서 미학을 발견합니다.",track:"봄날 (Spring Day)"},
-          Wings:{title:"각성하는 영혼",desc:"당신은 유혹과 성숙 사이의 심연을 항해하는 '철학자'입니다.",track:"피 땀 눈물"},
-          LY:{title:"진실된 치유자",desc:"자신을 사랑하는 것이 진정한 사랑의 시작임을 깨달은 '에피파니'의 소유자입니다.",track:"Epiphany"},
-          MOTS:{title:"영혼의 지도 제작자",desc:"페르소나와 그림자를 통합하여 '영혼의 지도'를 그려나갑니다.",track:"Black Swan"},
-          BE:{title:"따뜻한 동행자",desc:"멈춰버린 일상 속에서도 '삶은 계속된다'는 회복탄력성을 믿습니다.",track:"Life Goes On"},
-          Proof:{title:"영원한 증언자",desc:"우리의 역사를 소중히 여기며 '최고의 순간'을 기다립니다.",track:"Yet To Come"},
-          Solo:{title:"은하수 탐험가",desc:"독립적인 별이 되어 자신만의 '인디고' 우주를 탐험합니다.",track:"들꽃놀이 (Wild Flower)"}
+          Rebel:{title:"굴하지 않는 목소리",desc:"당신은 사회적 압력에 맞서 초심을 지키는 '도전 활동가'입니다.",track:"No More Dream",analysis:["당신의 영혼은 방탄소년단 데뷔 시절의 날것 그대로의 에너지와 공명합니다. 2013년 'No More Dream'으로 무대에 섰던 소년들처럼, 당신은 사회적 기대에 갇히기를 거부합니다. RM이 말했듯 '당신의 꿈은 인생의 지도'이며, 당신은 그 말을 문자 그대로 받아들여 세상이 정해놓은 길을 거부하고 자신만의 항로를 개척합니다.","'반항적 느와르' 원형은 강렬한 독립심과 흔들리지 않는 자신의 목소리에 대한 믿음으로 특징지어집니다. 당신은 사회가 강요하는 '성공 기준'의 환상을 꿰뚫어 봅니다. 당신의 강점은 홀로 설 수 있는 능력, 자신의 신념을 위한 방탄막이 될 수 있는 능력에 있습니다.","그러나 그 단단한 외면 아래에는 취약성이 자리잡고 있습니다 — 반항이 종종 고통에서 비롯된다는 깨달음. 슈가가 말했듯 '노력하지 않으면 결과도 없다,' 당신의 여정은 끊임없는 노력의 연속이었습니다. 이제 당신의 도전은 그 불꽃을 반대하는 대상이 아닌, 진정으로 사랑하는 것을 향해 나아가는 것입니다."]},
+          HYYH:{title:"위태로운 드리머",desc:"당신은 청춘의 '가장 아름답고도 아픈' 이중성에서 미학을 발견합니다.",track:"봄날 (Spring Day)",analysis:["당신은 '화양연화'의 정서와 공명합니다. 삶의 가장 아름답고도 위태로운 양면성에서 미학을 발견하는 분이군요. 당신은 지금 과거의 안주함에서 벗어나 찬란하지만 불확실한 독립으로 나아가는 '성장통'의 한복판에 서 있습니다.","당신의 영혼은 '인생에서 가장 아름다운 순간'에 속해 있습니다 — 청춘이 축복이자 저주인 덧없고 달콤쌉싸름한 장. 'I Need U'와 'Run'의 서사처럼, 가장 아름다운 순간이 가장 아프다는 것을 이해합니다. 당신은 깊이, 어쩌면 너무 깊이 느끼며, 그 예민함은 가장 큰 선물이자 가장 무거운 짐입니다.","'민감한 이상주의자' 원형은 혼란스러운 세상에서 의미를 갈망하는 것으로 정의됩니다. 당신은 평범함 속에서 아름다움을 봅니다 — 빛이 창문에 닿는 방식, 빗소리, 오래된 사진의 질감. V가 말했듯 '슬퍼도 괜찮아. 괜찮지 않아도 괜찮아,' 그 말이 당신의 핵심에 울려 퍼집니다. 당신은 슬픔에서 도망치지 않습니다; 그와 함께 앉아 배우고 예술로 승화시킵니다."]},
+          Wings:{title:"각성하는 영혼",desc:"당신은 유혹과 성숙 사이의 심연을 항해하는 '철학자'입니다.",track:"피 땀 눈물",analysis:["당신의 영혼은 '피 땀 눈물'의 무게를 짊어지고 있습니다 — 위대한 아름다움에는 위대한 희생이 따른다는 이해. 당신은 바로크, 화려함, 신성과 세속이 공존하는 것에 끌립니다. 'Wings' 솔로에서 멤버들이 각자의 그림자를 탐험했듯, 당신은 심연을 들여다보고 그곳에서 예술을 찾는 것을 두려워하지 않습니다.","'열정적 연금술사' 원형은 고통을 힘으로 변환합니다. 당신은 유혹이 두려워할 대상이 아니라 이해해야 할 대상임을 알고 있습니다. 정국의 'Begin'은 당신의 여정을 말해줍니다 — 사랑이 구원이자 파괴가 될 수 있다는 깨달음. 당신은 둘 다 맛보았고, 통과하는 것만이 유일한 길임을 배웠습니다.","당신의 길은 통합의 길입니다 — 빛과 그림자, 신성과 관능을 하나로 모으는 것. RM이 이 시대에 회상했듯 '고통은 선물이다. 그것 없이는 기쁨을 알 수 없을 것이다.' 당신의 도전은 인간성의 전체 스펙트럼을 포용하고, 날개가 당신을 세상 위로가 아닌 세상 더 깊숙이 데려가도록 하는 것입니다."]},
+          LY:{title:"진실된 치유자",desc:"자신을 사랑하는 것이 진정한 사랑의 시작임을 깨달은 '에피파니'의 소유자입니다.",track:"Epiphany",analysis:["당신의 영혼은 'Love Yourself: Her'에서 'Answer'까지의 여정으로 형성되었습니다 — 추락, 치유, 상승의 완전한 호. 당신은 자기 사랑이 목적지가 아니라 실천이며, 거울을 보고 '너는 충분해'라고 말하는 매일의 선택임을 이해합니다. 'Euphoria'와 'Epiphany'의 서사처럼, 당신이 기다려온 사람이 바로 당신 자신임을 배웠습니다.","'빛나는 치유자' 원형은 부드러운 홀로그램 빛으로 빛납니다. 당신은 다른 사람들의 아름다움을 그들보다 먼저 보는 드문 능력을 가지고 있습니다. 진의 'Epiphany'가 당신의 본질을 포착합니다: '내가 사랑해야 할 사람은 바로 나야.' 당신은 치유가 외부로 퍼져나간다는 것을 배웠습니다 — 자신을 사랑함으로써 다른 사람들에게도 그렇게 할 수 있는 허락을 주는 것입니다.","당신의 여정은 통합의 여정입니다 — 정체성의 조각난 조각들을 하나의 일관되고 아름다운 전체로 모으는 것. RM이 LY 시대에 말했듯 '정답은 없어. 정답은 너 안에 있어.' 당신은 이 지혜를 등불처럼 가지고 다니며, 다른 사람들의 길을 비추면서도 자신의 길을 계속 걸어갑니다."]},
+          MOTS:{title:"영혼의 지도 제작자",desc:"페르소나와 그림자를 통합하여 '영혼의 지도'를 그려나갑니다.",track:"Black Swan",analysis:["당신의 영혼은 깊이에 끌립니다 — 방탄소년단이 'Map of the Soul' 시리즈에 능숙하게 엮어낸 융의 개념들. 당신은 페르소나가 거짓말이 아니라 세상과의 필수적인 인터페이스이며, 그림자는 적이 아니라 스승임을 이해합니다. 'Black Swan'은 창작의 불꽃을 잃을지도 모른다는 두려움과 그럼에도 계속 창조하려는 결의를 말해줍니다.","'철학적 탐험가' 원형은 표면적인 답변에 결코 만족하지 않습니다. 당신은 어려운 질문을 던집니다: 나는 누구인가? 나의 목적은 무엇인가? 나는 무엇을 두려워하는가? RM의 인트로 'Persona'처럼, 당신은 '도대체 나는 누구인가?'라는 질문과 씨름합니다 — 위기로서가 아니라 평생의 탐구로서.","당신의 여정은 개성화의 과정입니다 — 진정한 자신이 되어가는 과정. 슈가의 'Shadow'는 당신의 투쟁을 포착합니다: 성공에 대한 두려움, 기대의 무게, 보여지고 숨겨지고 싶은 욕망. 그러나 앨범이 가르쳐주듯, 그림자를 통합해야만 온전해질 수 있습니다. 당신의 길은 완벽함이 아니라 진정성에 관한 것입니다."]},
+          BE:{title:"따뜻한 동행자",desc:"멈춰버린 일상 속에서도 '삶은 계속된다'는 회복탄력성을 믿습니다.",track:"Life Goes On",analysis:["당신의 영혼은 'BE' 시대의 조용한 지혜를 담고 있습니다 — 전 세계적 중단과 개인적 성찰의 시기에 탄생한 앨범. 당신은 치유가 항상 웅장한 제스처로 오지 않는다는 것을 이해합니다. 일상의 작고 신성한 의식 속에 있습니다. 'Life Goes On'은 당신의 찬가입니다: 세상이 멈춰도 우리는 함께 나아갈 방법을 찾는다는 부드러운 일깨움.","'부드러운 닻' 원형은 어려운 시기에 모두가 찾는 친구입니다. 진의 'Moon'이나 정국의 'Still With You'처럼, 당신은 다른 사람들을 안전하게 만드는 안정된 존재감을 가지고 있습니다. 당신은 일상에서 아름다움을 찾습니다 — 함께하는 식사, 조용한 대화, 당신을 진정으로 알아보는 사람의 편안함 속에서.","당신의 여정은 취약함이 약함이 아니라 진정한 연결의 기초임을 가르쳐주었습니다. RM이 BE 시대에 말했듯 '괜찮지 않아도 괜찮아.' 당신은 자신의 고통과 타인의 고통을 위한 공간을 마련하고, 수용의 성역을 만드는 법을 배웠습니다. 당신의 선물은 주변 사람들이 집처럼 느끼게 하는 능력입니다."]},
+          Proof:{title:"영원한 증언자",desc:"우리의 역사를 소중히 여기며 '최고의 순간'을 기다립니다.",track:"Yet To Come",analysis:["당신의 영혼은 유산의 무게를 이해합니다. 'Proof' 앤솔로지는 단순한 노래 모음집이 아니라 여정의 증거입니다 — 그리고 당신은 자신의 삶도 같은 방식으로 봅니다. 모든 장, 모든 투쟁, 모든 승리는 당신이 여전히 쓰고 있는 더 큰 이야기의 일부입니다. 'Yet To Come'은 당신의 신조입니다: 최고의 순간은 아직 오지 않았습니다.","'영원한 증언자' 원형은 과거를 존중하면서 미래를 바라봅니다. 당신이 어디서 왔는지가 당신이 누구가 되는지를 형성하지만, 그것이 어디로 가는지를 정의하지는 않는다는 것을 이해합니다. 10년의 여정을 감사와 기대로 되돌아본 멤버들처럼, 당신은 자신의 역사를 우아하게 짊어지고 그것을 감옥이 아닌 기초로 사용합니다.","당신의 여정은 통합의 여정입니다 — 자신의 모든 버전을 하나의 일관된 전체로 모으는 것. 멤버들이 'Proof'에서 회상했듯 '나는 누구인가?'에 대한 답은 단일한 순간이 아니라 평생의 과정입니다. 당신의 선물은 자신의 이야기에서 흐름을 보고 다른 사람들이 자신의 이야기를 찾도록 영감을 주는 능력입니다."]},
+          Solo:{title:"은하수 탐험가",desc:"독립적인 별이 되어 자신만의 '인디고' 우주를 탐험합니다.",track:"들꽃놀이 (Wild Flower)",analysis:["당신의 영혼은 'Chapter 2'의 에너지와 공명합니다 — 각 멤버가 전체와 연결된 상태에서 개인의 예술성을 탐험한 시대. 당신은 진정한 자유가 혼자 가는 것이 아니라, 스스로 설 수 있으면서도 더 큰 무리의 일부가 되기를 선택하는 것임을 이해합니다. 멤버들의 솔로 여정처럼, 개성과 공동체는 반대가 아니라 보완임을 배웠습니다.","'우주적 직조자' 원형은 우아하게 세계 사이를 이동합니다. 당신은 자신만의 길을 탐험했습니다 — 제이홉의 'Jack In The Box', RM의 'Indigo', Agust D의 'D-DAY', 정국의 'GOLDEN'처럼 — 그리고 당신의 개인적 목소리는 공유될 때 더 강해진다는 것을 발견했습니다. 당신은 별이자 별자리의 일부이며, 혼자이면서 함께 빛납니다.","당신의 여정은 확장의 여정입니다 — 뿌리에서 멀어지는 것이 아니라 그로부터 바깥으로 나아가는 것. RM이 'Indigo'에 대해 말했듯 '20대를 가능한 한 솔직하게 보여주고 싶었습니다.' 당신도 자신의 장을 기록하고 있으며, 가장 진정한 이야기는 개별 음표와 그들이 함께 만드는 화음을 모두 포용하는 것임을 알고 있습니다."]}
         },
         questions:[
           {text:"칠판에 적힌 '성공 기준' 앞에서, 당신은:",options:["반항한다 — 내 규칙을 다시 쓰겠다.","향수를 느낀다 — 이 고통도 청춘의 일부다.","진짜 나를 감춰야 한다는 압박을 느낀다.","시간의 흐름을 느낀다 — 이것도 역사가 될 것이다."]},
@@ -134,16 +177,16 @@
         ]
       },
       'zh-CN':{
-        ui:{next:"下一步",restart:"重新迁徙",result:"揭晓灵魂",lang:"简体中文",start:"开始你的旅程",again:"重新测试",analysis:"阅读灵魂分析",back:"返回结果",healing:"治愈曲目",youtube:"在YouTube上观看",cont:"故事继续...",calc:"正在计算你的灵魂原型...",soundscape:"音景",tagline:"通过13道题目和8个时代的旅程，发现你的防弹少年团灵魂原型。",title:"Echoes of the Microcosmos",subtitle:"防弹少年团灵魂迁移测试",score:"你的灵魂原型",quotes:["人生中最美丽的瞬间是...","你从不孤单","生活仍在继续","最好的尚未到来"]},
+        ui:{next:"下一步",restart:"重新迁徙",result:"揭晓灵魂",lang:"简体中文",start:"开始你的旅程",again:"重新测试",analysis:"阅读灵魂分析",back:"返回结果",healing:"治愈曲目",youtube:"在YouTube上观看",cont:"故事继续...",calc:"正在计算你的灵魂原型...",soundscape:"音景",tagline:"通过13道题目和8个时代的旅程，发现你的防弹少年团灵魂原型。",title:"Echoes of the Microcosmos",subtitle:"防弹少年团灵魂迁移测试",score:"你的灵魂原型",bulletproof:"We Are Bulletproof",quotes:["人生中最美丽的瞬间是...","你从不孤单","生活仍在继续","最好的尚未到来"],hyyh:{archetype:"花样年华 (Ethereal Youth)",analysis:"你的灵魂属于\u201C人生中最美丽的瞬间\u201D——那个转瞬即逝、苦乐参半的篇章，青春既是祝福也是诅咒。就像《I Need U》和《Run》的叙事，你明白最美丽的时刻往往也是最痛苦的。你感受深刻，也许过于深刻，这种敏感既是最大的天赋也是最沉重的负担。\u201C敏感的理想主义者\u201D原型定义了对混乱世界中意义的渴望。你在平凡中看到美——光线照在窗户上的方式、雨声、老照片的质感。你的旅程映照着HYYH的叙事——在童年与成年之间的阈限空间中寻找身份认同。",quote_jimin:"我意识到这也是我们的故事——青春的挣扎、恐惧和渴望。这不只是一个概念；这就是我们。",quote_v:"我想捕捉一种感觉，一种瞬间的杰作。能让人们停下来想，\u201C这很美。\u201D",healing_track:"春日 (Spring Day)"}},
         results:{
-          Rebel:{title:"不屈的先声",desc:"你是守护最初梦想、对抗社会压力的\u201C挑战者\u201D。",track:"No More Dream"},
-          HYYH:{title:"脆弱的追梦人",desc:"你在\u201C最美与最痛\u201D的青春二元性中捕捉那转瞬即逝的灿烂。",track:"春日 (Spring Day)"},
-          Wings:{title:"觉醒的灵魂",desc:"你是航行于诱惑与成熟之间深渊的\u201C哲学家\u201D。",track:"血汗泪 (Blood Sweat & Tears)"},
-          LY:{title:"真诚的治愈者",desc:"你已领悟\u201CEpiphany\u201D——爱自己是真爱的起点。",track:"Epiphany"},
-          MOTS:{title:"灵魂地图绘制者",desc:"你整合人格面具与阴影，绘制自己的\u201C灵魂地图\u201D。",track:"Black Swan"},
-          BE:{title:"温暖的同行者",desc:"你在\u201CLife Goes On\u201D的日常韧性中找到慰藉。",track:"Life Goes On"},
-          Proof:{title:"永恒的见证者",desc:"你相信\u201C最好的尚未到来\u201D，珍惜你历史的选集。",track:"Yet To Come"},
-          Solo:{title:"银河探索者",desc:"你是一颗独立的星，探索属于自己的\u201CIndigo\u201D宇宙。",track:"野花 (Wild Flower)"}
+          Rebel:{title:"不屈的先声",desc:"你是守护最初梦想、对抗社会压力的\u201C挑战者\u201D。",track:"No More Dream",analysis:["你的灵魂与防弹少年团出道时期原始、未经雕琢的能量产生共鸣。就像2013年那些站在舞台上高唱《No More Dream》的少年一样，你拒绝被社会的期望所束缚。RM曾说过：\u201C你的梦想是你人生的地图。\u201D而你确实如此践行——即使世界告诉你要走别人走过的路，你依然开辟自己的航向。","\u201C反抗的黑色电影\u201D原型以强烈的独立性和对自己声音不可动摇的信念为特征。你看穿了社会试图强加的\u201C成功标准\u201D的幻象，就像《N.O》和《We Are Bulletproof Pt.2》中那种 defiant 的姿态。你的力量在于你能够独自站立，成为自己信念的防弹盾牌。","然而在那坚硬的外表之下，隐藏着脆弱——你知道反抗往往源于痛苦。SUGA曾反思：\u201C不努力就不会有结果。\u201D而你的旅程一直是不断努力的过程。你现在的挑战是将那股火焰不仅导向你所反对的事物，而是导向你真正热爱的事物。"]},
+          HYYH:{title:"脆弱的追梦人",desc:"你在\u201C最美与最痛\u201D的青春二元性中捕捉那转瞬即逝的灿烂。",track:"春日 (Spring Day)",analysis:["你与\u201C花样年华\u201D的时代精神产生共鸣。你在生命\u201C最美与最痛\u201D的双重性中发现美。你正在经历\u201C成长痛\u201D——从过去的安全地带走向不确定但灿烂的独立。","你的灵魂属于\u201C人生中最美丽的瞬间\u201D——那个转瞬即逝、苦乐参半的篇章，青春既是祝福也是诅咒。就像《I Need U》和《Run》的叙事，你明白最美丽的时刻往往也是最痛苦的。你感受深刻，也许过于深刻，这种敏感既是最大的天赋也是最沉重的负担。","\u201C敏感的理想主义者\u201D原型定义了对混乱世界中意义的渴望。你在平凡中看到美——光线照在窗户上的方式、雨声、老照片的质感。V曾说过：\u201C难过也没关系。不好也没关系。\u201D这些话与你的内心产生共鸣。你不逃避悲伤；你与它共处，从中学习，并将其转化为艺术。"]},
+          Wings:{title:"觉醒的灵魂",desc:"你是航行于诱惑与成熟之间深渊的\u201C哲学家\u201D。",track:"血汗泪 (Blood Sweat & Tears)",analysis:["你的灵魂承载着\u201C血汗泪\u201D的重量——你明白伟大的美丽需要巨大的牺牲。你被巴洛克风格、华丽的事物、既神圣又世俗的东西所吸引。就像成员们在《Wings》个人曲中探索各自的阴影一样，你不害怕凝视深渊并在其中发现艺术。","\u201C热情的炼金术士\u201D原型将痛苦转化为力量。你明白诱惑不是需要恐惧的东西，而是需要理解的东西。柾国的《Begin》诉说着你的旅程——意识到爱既是救赎也是毁灭。你两者都尝过，并且你明白唯一的出路就是穿越。","你的道路是整合的道路——将光明与阴影、神圣与世俗融为一体。正如RM在这个时代所反思的：\u201C痛苦是礼物。没有它，我们就不会知道快乐。\u201D你的挑战是拥抱你人性的全部光谱，让你的翅膀带你不是飞越世界，而是更深入地进入世界。"]},
+          LY:{title:"真诚的治愈者",desc:"你已领悟\u201CEpiphany\u201D——爱自己是真爱的起点。",track:"Epiphany",analysis:["你的灵魂由从《Love Yourself: Her》到《Answer》的旅程塑造——一个坠落、治愈和崛起的完整弧线。你明白自爱不是一个目的地，而是一种实践，一种每天看着镜子说\u201C你已经足够了\u201D的选择。就像《Euphoria》和《Epiphany》的叙事一样，你学会了那个你一直在等待的人就是你自己。","\u201C闪耀的治愈者\u201D原型散发着温柔、全息般的光芒。你拥有在他人看到自己之美之前就看到它的罕见能力。Jin的《Epiphany》捕捉了你的本质：\u201C这个世界上我应该爱的人就是我自己。\u201D你学会了治愈是向外辐射的——通过爱自己，你给予他人这样做的许可。","你的旅程是整合的旅程——将你身份中破碎的碎片拼凑成一个连贯、美丽的整体。正如RM在LY时代所说：\u201C没有答案。答案就在你心中。\u201D你像提灯一样携带这份智慧，在继续走自己的路的同时，也为他人照亮道路。"]},
+          MOTS:{title:"灵魂地图绘制者",desc:"你整合人格面具与阴影，绘制自己的\u201C灵魂地图\u201D。",track:"Black Swan",analysis:["你的灵魂被深度所吸引——被防弹少年团巧妙编织进《Map of the Soul》系列中的荣格概念所吸引。你明白人格面具不是谎言，而是与世界必要的接口；阴影不是敌人，而是老师。《Black Swan》诉说着你害怕失去创作火花，以及无论如何都要继续创作的决心。","\u201C哲学探索者\u201D原型从不满足于表面答案。你提出艰难的问题：我是谁？我的目的是什么？我害怕什么？就像RM的Intro《Persona》一样，你与\u201C我到底是谁？\u201D这个问题搏斗——不是作为危机，而是作为终生的探索。你的力量在于你的求知欲和与不确定性共处的意愿。","你的旅程是个体化的过程——成为真实自我的过程。SUGA的《Shadow》捕捉了你的挣扎：对成功的恐惧、期望的重量、既想被看见又想被隐藏的欲望。但正如专辑教导我们的，只有整合我们的阴影，我们才能变得完整。你的道路不是关于完美，而是关于真实。"]},
+          BE:{title:"温暖的同行者",desc:"你在\u201CLife Goes On\u201D的日常韧性中找到慰藉。",track:"Life Goes On",analysis:["你的灵魂承载着\u201CBE\u201D时代的安静智慧——一张诞生于全球停摆和个人反思时期的专辑。你明白治愈并不总是以宏大的姿态到来，而是在日常生活的微小神圣仪式中。《Life Goes On》是你的颂歌：一个温柔的提醒，即使世界停止，我们也能找到继续前进的方式，一起。","\u201C温柔的锚\u201D原型是每个人在需要时都会求助的朋友。就像Jin的《Moon》或柾国的《Still With You》一样，你有一种让人感到安全的稳定存在。你在日常中寻找美——在共享的餐食中，在安静的对话中，在被真正爱你的人看见的舒适中。","你的旅程教会你脆弱不是弱点，而是真正连接的基础。正如RM在BE时代所说：\u201C不好也没关系。\u201D你学会了为自己的痛苦和他人的痛苦留出空间，创造一个接纳的庇护所。你的天赋是让你周围的人感到像家一样的能力。"]},
+          Proof:{title:"永恒的见证者",desc:"你相信\u201C最好的尚未到来\u201D，珍惜你历史的选集。",track:"Yet To Come",analysis:["你的灵魂理解遗产的重量。《Proof》选集不仅仅是歌曲的集合，而是旅程的见证——而你以同样的方式看待自己的生活。每一个章节、每一次挣扎、每一次胜利都是你仍在书写的更大叙事的一部分。《Yet To Come》是你的信条：最好的时刻还在前方。","\u201C永恒的档案管理员\u201D原型在尊重过去的同时展望未来。你明白你来自哪里塑造了你成为谁，但它并不定义你要去哪里。就像成员们以感激和期待回顾他们十年旅程一样，你优雅地背负着自己的历史，将其作为基础而非牢笼。","你的旅程是整合的旅程——将你所有的版本整合成一个连贯的整体。正如成员们在《Proof》中所反思的，\u201C我是谁？\u201D的答案不是一个单一的瞬间，而是一生的成长。你的天赋是能够看到自己故事中的主线，并激励他人找到他们的主线。"]},
+          Solo:{title:"银河探索者",desc:"你是一颗独立的星，探索属于自己的\u201CIndigo\u201D宇宙。",track:"野花 (Wild Flower)",analysis:["你的灵魂与\u201CChapter 2\u201D的能量产生共鸣——每个成员在保持与整体连接的同时探索个人艺术性的时代。你明白真正的自由不是独自前行，而是知道你可以独立站立，同时仍然选择成为更大事物的一部分。就像成员们的个人旅程一样，你学会了个性与共融不是对立面，而是互补的。","\u201C宇宙编织者\u201D原型优雅地在不同世界之间穿梭。你探索了自己的道路——就像j-hope的《Jack In The Box》、RM的《Indigo》、Agust D的《D-DAY》或柾国的《GOLDEN》——你发现你的个人声音在分享时会变得更强大。你既是一颗星，也是星座的一部分，独自闪耀也共同闪耀。","你的旅程是扩展的旅程——不是远离你的根源，而是从根源向外延伸。正如RM谈到《Indigo》时所说：\u201C我想尽可能诚实地展示我的20多岁。\u201D你也在记录自己的篇章，知道最真实的故事是既拥抱个人音符也拥抱它们共同创造的和声的故事。"]}
         },
         questions:[
           {text:"面对黑板上写着的\u201C成功标准\u201D，你感到：",options:["反抗——我要重新定义自己的规则。","怀旧——这场挣扎也是我青春的一部分。","隐藏真实自我的压力。","时光流逝感——这一切终将成为历史。"]},
@@ -162,16 +205,16 @@
         ]
       },
       'zh-TW':{
-        ui:{next:"下一步",restart:"重新遷徙",result:"揭曉靈魂",lang:"繁體中文",start:"開始你的旅程",again:"重新測試",analysis:"閱讀靈魂分析",back:"返回結果",healing:"治癒曲目",youtube:"在YouTube上觀看",cont:"故事繼續...",calc:"正在計算你的靈魂原型...",soundscape:"音景",tagline:"透過13道題目和8個時代的旅程，發現你的防彈少年團靈魂原型。",title:"Echoes of the Microcosmos",subtitle:"防彈少年團靈魂遷移測試",score:"你的靈魂原型",quotes:["人生中最美麗的瞬間是...","你從不孤單","生活仍在繼續","最好的尚未到來"]},
+        ui:{next:"下一步",restart:"重新遷徙",result:"揭曉靈魂",lang:"繁體中文",start:"開始你的旅程",again:"重新測試",analysis:"閱讀靈魂分析",back:"返回結果",healing:"治癒曲目",youtube:"在YouTube上觀看",cont:"故事繼續...",calc:"正在計算你的靈魂原型...",soundscape:"音景",tagline:"透過13道題目和8個時代的旅程，發現你的防彈少年團靈魂原型。",title:"Echoes of the Microcosmos",subtitle:"防彈少年團靈魂遷移測試",score:"你的靈魂原型",bulletproof:"We Are Bulletproof",quotes:["人生中最美麗的瞬間是...","你從不孤單","生活仍在繼續","最好的尚未到來"],hyyh:{archetype:"花樣年華 (Ethereal Youth)",analysis:"你的靈魂屬於\u201C人生中最美麗的瞬間\u201D——那個轉瞬即逝、苦樂參半的篇章，青春既是祝福也是詛咒。就像《I Need U》和《Run》的敘事，你明白最美麗的時刻往往也是最痛苦的。你感受深刻，也許過於深刻，這種敏感既是最大的天賦也是最沉重的負擔。\u201C敏感的理想主義者\u201D原型定義了對混亂世界中意義的渴望。你在平凡中看到美——光線照在窗戶上的方式、雨聲、老照片的質感。你的旅程映照著HYYH的敘事——在童年與成年之間的閾限空間中尋找身份認同。",quote_jimin:"我意識到這也是我們的故事——青春的掙扎、恐懼和渴望。這不只是一個概念；這就是我們。",quote_v:"我想捕捉一種感覺，一種瞬間的傑作。能讓人們停下來想，\u201C這很美。\u201D",healing_track:"春日 (Spring Day)"}},
         results:{
-          Rebel:{title:"不屈的先聲",desc:"你是守護最初夢想、對抗社會壓力的\u201C挑戰者\u201D。",track:"No More Dream"},
-          HYYH:{title:"脆弱的追夢人",desc:"你在\u201C最美與最痛\u201D的青春二元性中捕捉那轉瞬即逝的燦爛。",track:"春日 (Spring Day)"},
-          Wings:{title:"覺醒的靈魂",desc:"你是航行於誘惑與成熟之間深淵的\u201C哲學家\u201D。",track:"血汗淚 (Blood Sweat & Tears)"},
-          LY:{title:"真誠的治癒者",desc:"你已領悟\u201CEpiphany\u201D——愛自己是真愛的起點。",track:"Epiphany"},
-          MOTS:{title:"靈魂地圖繪製者",desc:"你整合人格面具與陰影，繪製自己的\u201C靈魂地圖\u201D。",track:"Black Swan"},
-          BE:{title:"溫暖的同行者",desc:"你在\u201CLife Goes On\u201D的日常韌性中找到慰藉。",track:"Life Goes On"},
-          Proof:{title:"永恆的見證者",desc:"你相信\u201C最好的尚未到來\u201D，珍惜你歷史的選集。",track:"Yet To Come"},
-          Solo:{title:"銀河探索者",desc:"你是一顆獨立的星，探索屬於自己的\u201CIndigo\u201D宇宙。",track:"野花 (Wild Flower)"}
+          Rebel:{title:"不屈的先聲",desc:"你是守護最初夢想、對抗社會壓力的\u201C挑戰者\u201D。",track:"No More Dream",analysis:["你的靈魂與防彈少年團出道時期原始、未經雕琢的能量產生共鳴。就像2013年那些站在舞臺上高唱《No More Dream》的少年一樣，你拒絕被社會的期望所束縛。RM曾說過：\u201C你的夢想是你人生的地圖。\u201D而你確實如此踐行——即使世界告訴你要走別人走過的路，你依然開闢自己的航向。","\u201C反抗的黑色電影\u201D原型以強烈的獨立性和對自己聲音不可動搖的信念為特徵。你看穿了社會試圖強加的\u201C成功標準\u201D的幻象，就像《N.O》和《We Are Bulletproof Pt.2》中那種 defiant 的姿態。你的力量在於你能夠獨自站立，成為自己信念的防彈盾牌。","然而在那堅硬的外表之下，隱藏著脆弱——你知道反抗往往源於痛苦。SUGA曾反思：\u201C不努力就不會有結果。\u201D而你的旅程一直是不斷努力的過程。你現在的挑戰是將那股火焰不僅導向你反對的事物，而是導向你真正熱愛的事物。"]},
+          HYYH:{title:"脆弱的追夢人",desc:"你在\u201C最美與最痛\u201D的青春二元性中捕捉那轉瞬即逝的燦爛。",track:"春日 (Spring Day)",analysis:["你與\u201C花樣年華\u201D的時代精神產生共鳴。你在生命\u201C最美與最痛\u201D的雙重性中發現美。你正在經歷\u201C成長痛\u201D——從過去的安全地帶走向不確定但燦爛的獨立。","你的靈魂屬於\u201C人生中最美麗的瞬間\u201D——那個轉瞬即逝、苦樂參半的篇章，青春既是祝福也是詛咒。就像《I Need U》和《Run》的敘事，你明白最美麗的時刻往往也是最痛苦的。你感受深刻，也許過於深刻，這種敏感既是最大的天賦也是最沉重的負擔。","\u201C敏感的理想主義者\u201D原型定義了對混亂世界中意義的渴望。你在平凡中看到美——光線照在窗戶上的方式、雨聲、老照片的質感。V曾說過：\u201C難過也沒關係。不好也沒關係。\u201D這些話與你的內心產生共鳴。你不逃避悲傷；你與它共處，從中學習，並將其轉化為藝術。"]},
+          Wings:{title:"覺醒的靈魂",desc:"你是航行於誘惑與成熟之間深淵的\u201C哲學家\u201D。",track:"血汗淚 (Blood Sweat & Tears)",analysis:["你的靈魂承載著\u201C血汗淚\u201D的重量——你明白偉大的美麗需要巨大的犧牲。你被巴洛克風格、華麗的事物、既神聖又世俗的東西所吸引。就像成員們在《Wings》個人曲中探索各自的陰影一樣，你不害怕凝視深淵並在其中發現藝術。","\u201C熱情的煉金術士\u201D原型將痛苦轉化為力量。你明白誘惑不是需要恐懼的東西，而是需要理解的東西。柾國的《Begin》訴說著你的旅程——意識到愛既是救贖也是毀滅。你兩者都嘗過，並且你明白唯一的出路就是穿越。","你的道路是整合的道路——將光明與陰影、神聖與世俗融為一體。正如RM在這個時代所反思的：\u201C痛苦是禮物。沒有它，我們就不會知道快樂。\u201D你的挑戰是擁抱你人性的全部光譜，讓你的翅膀帶你不是飛越世界，而是更深入地進入世界。"]},
+          LY:{title:"真誠的治癒者",desc:"你已領悟\u201CEpiphany\u201D——愛自己是真愛的起點。",track:"Epiphany",analysis:["你的靈魂由從《Love Yourself: Her》到《Answer》的旅程塑造——一個墜落、治癒和崛起的完整弧線。你明白自愛不是一個目的地，而是一種實踐，一種每天看著鏡子說\u201C你已經足夠了\u201D的選擇。就像《Euphoria》和《Epiphany》的敘事一樣，你學會了那個你一直在等待的人就是你自己。","\u201C閃耀的治癒者\u201D原型散發著溫柔、全息般的光芒。你擁有在他人看到自己之美之前就看到它的罕見能力。Jin的《Epiphany》捕捉了你的本質：\u201C這個世界上我應該愛的人就是我自己。\u201D你學會了治癒是向外輻射的——透過愛自己，你給予他人這樣做的許可。","你的旅程是整合的旅程——將你身份中破碎的碎片拼湊成一個連貫、美麗的整體。正如RM在LY時代所說：\u201C沒有答案。答案就在你心中。\u201D你像提燈一樣攜帶這份智慧，在繼續走自己的路的同時，也為他人照亮道路。"]},
+          MOTS:{title:"靈魂地圖繪製者",desc:"你整合人格面具與陰影，繪製自己的\u201C靈魂地圖\u201D。",track:"Black Swan",analysis:["你的靈魂被深度所吸引——被防彈少年團巧妙編織進《Map of the Soul》系列中的榮格概念所吸引。你明白人格面具不是謊言，而是與世界必要的接口；陰影不是敵人，而是老師。《Black Swan》訴說著你害怕失去創作火花，以及無論如何都要繼續創作的決心。","\u201C哲學探索者\u201D原型從不滿足於表面答案。你提出艱難的問題：我是誰？我的目的是什麼？我害怕什麼？就像RM的Intro《Persona》一樣，你與\u201C我到底是誰？\u201D這個問題搏鬥——不是作為危機，而是作為終生的探索。你的力量在於你的求知慾和與不確定性共處的意願。","你的旅程是個體化的過程——成為真實自我的過程。SUGA的《Shadow》捕捉了你的掙扎：對成功的恐懼、期望的重量、既想被看見又想被隱藏的慾望。但正如專輯教導我們的，只有整合我們的陰影，我們才能變得完整。你的道路不是關於完美，而是關於真實。"]},
+          BE:{title:"溫暖的同行者",desc:"你在\u201CLife Goes On\u201D的日常韌性中找到慰藉。",track:"Life Goes On",analysis:["你的靈魂承載著\u201CBE\u201D時代的安靜智慧——一張誕生於全球停擺和個人反思時期的專輯。你明白治癒並不總是以宏大的姿態到來，而是在日常生活的微小神聖儀式中。《Life Goes On》是你的頌歌：一個溫柔的提醒，即使世界停止，我們也能找到繼續前進的方式，一起。","\u201C溫柔的錨\u201D原型是每個人在需要時都會求助的朋友。就像Jin的《Moon》或柾國的《Still With You》一樣，你有一種讓人感到安全的穩定存在。你在日常中尋找美——在共享的餐食中，在安靜的對話中，在被真正愛你的人看見的舒適中。","你的旅程教會你脆弱不是弱點，而是真正連接的基礎。正如RM在BE時代所說：\u201C不好也沒關係。\u201D你學會了為自己的痛苦和他人的痛苦留出空間，創造一個接納的庇護所。你的天賦是讓你周圍的人感到像家一樣的能力。"]},
+          Proof:{title:"永恆的見證者",desc:"你相信\u201C最好的尚未到來\u201D，珍惜你歷史的選集。",track:"Yet To Come",analysis:["你的靈魂理解遺產的重量。《Proof》選集不僅僅是歌曲的集合，而是旅程的見證——而你以同樣的方式看待自己的生活。每一個章節、每一次掙扎、每一次勝利都是你仍在書寫的更大敘事的一部分。《Yet To Come》是你的信條：最好的時刻還在前方。","\u201C永恆的檔案管理員\u201D原型在尊重過去的同時展望未來。你明白你來自哪裡塑造了你成為誰，但它並不定義你要去哪裡。就像成員們以感激和期待回顧他們十年旅程一樣，你優雅地背負著自己的歷史，將其作為基礎而非牢籠。","你的旅程是整合的旅程——將你所有的版本整合成一個連貫的整體。正如成員們在《Proof》中所反思的，\u201C我是誰？\u201D的答案不是一個單一的瞬間，而是一生的成長。你的天賦是能夠看到自己故事中的主線，並激勵他人找到他們的主線。"]},
+          Solo:{title:"銀河探索者",desc:"你是一顆獨立的星，探索屬於自己的\u201CIndigo\u201D宇宙。",track:"野花 (Wild Flower)",analysis:["你的靈魂與\u201CChapter 2\u201D的能量產生共鳴——每個成員在保持與整體連接的同時探索個人藝術性的時代。你明白真正的自由不是獨自前行，而是知道你可以獨立站立，同時仍然選擇成為更大事物的一部分。就像成員們的個人旅程一樣，你學會了個性與共融不是對立面，而是互補的。","\u201C宇宙編織者\u201D原型優雅地在不同世界之間穿梭。你探索了自己的道路——就像j-hope的《Jack In The Box》、RM的《Indigo》、Agust D的《D-DAY》或柾國的《GOLDEN》——你發現你的個人聲音在分享時會變得更強大。你既是一顆星，也是星座的一部分，獨自閃耀也共同閃耀。","你的旅程是擴展的旅程——不是遠離你的根源，而是從根源向外延伸。正如RM談到《Indigo》時所說：\u201C我想盡可能誠實地展示我的20多歲。\u201D你也在記錄自己的篇章，知道最真實的故事是既擁抱個人音符也擁抱它們共同創造的和聲的故事。"]}
         },
         questions:[
           {text:"面對黑板上寫著的\u201C成功標準\u201D，你感到：",options:["反抗——我要重新定義自己的規則。","懷舊——這場掙扎也是我青春的一部分。","隱藏真實自我的壓力。","時光流逝感——這一切終將成為歷史。"]},
@@ -444,40 +487,55 @@
       );
     }
 
-    // ===== SOUNDSCAPE =====
-    function Soundscape({active,onToggle}){
-      const ctxRef=useRef(null);
-      const oscRef=useRef(null);
-      const gainRef=useRef(null);
+    // ===== AUDIO PLAYER (Spring Day.mp3) =====
+    function AudioPlayer({active,onToggle,volumeRef}){
+      const audioRef=useRef(null);
+      const [ready,setReady]=useState(false);
       useEffect(()=>{
-        if(active&&!ctxRef.current){
-          try{
-            const ac=new(window.AudioContext||window.webkitAudioContext)();
-            const g=ac.createGain();
-            g.gain.value=0.08;
-            g.connect(ac.destination);
-            const o=ac.createOscillator();
-            o.type='sine';
-            o.frequency.value=60;
-            const lfo=ac.createOscillator();
-            lfo.type='sine';
-            lfo.frequency.value=0.5;
-            const lfoG=ac.createGain();
-            lfoG.gain.value=20;
-            lfo.connect(lfoG);lfoG.connect(o.frequency);
-            o.connect(g);
-            o.start();lfo.start();
-            ctxRef.current=ac;oscRef.current=o;gainRef.current=g;
-          }catch(e){console.log('Audio not available');}
-        }else if(!active&&ctxRef.current){
-          try{ctxRef.current.close();}catch(e){}
-          ctxRef.current=null;oscRef.current=null;gainRef.current=null;
+        if(!audioRef.current){
+          const audio=new Audio('./Spring Day.mp3');
+          audio.loop=true;
+          audio.volume=0;
+          audioRef.current=audio;
+          audio.addEventListener('canplaythrough',()=>setReady(true));
+          audio.addEventListener('error',()=>console.log('Spring Day.mp3 not found — audio disabled'));
         }
         return()=>{
-          if(ctxRef.current){try{ctxRef.current.close();}catch(e){}ctxRef.current=null;}
+          if(audioRef.current){audioRef.current.pause();audioRef.current=null;}
         };
-      },[active]);
-      return h('button',{onClick:onToggle,className:'soundscape-btn'+(active?' active':''),title:'Soundscape'},active?'♪':'♪');
+      },[]);
+      useEffect(()=>{
+        const audio=audioRef.current;
+        if(!audio||!ready)return;
+        if(active){
+          audio.play().catch(()=>{});
+          // Smooth volume ramp to 1.0
+          const targetVol=volumeRef&&volumeRef.current!==undefined?volumeRef.current:1.0;
+          const ramp=()=>{
+            if(audio.volume<targetVol){
+              audio.volume=Math.min(audio.volume+0.05,targetVol);
+              requestAnimationFrame(ramp);
+            }
+          };
+          ramp();
+        }else{
+          // Smooth fade out
+          const fade=()=>{
+            if(audio.volume>0.01){
+              audio.volume=Math.max(audio.volume-0.05,0);
+              requestAnimationFrame(fade);
+            }else{
+              audio.pause();
+            }
+          };
+          fade();
+        }
+      },[active,ready,volumeRef]);
+      return h('button',{onClick:onToggle,className:'soundscape-btn'+(active?' active':''),title:active?'Pause Spring Day':'Play Spring Day'},
+        active
+          ? h('div',{className:'vinyl-icon spinning'})
+          : h('span',{className:'music-note'},'\u266B')
+      );
     }
 
     // ===== QUIZ =====
@@ -565,6 +623,8 @@
       const [showAnalysis,setShowAnalysis]=useState(false);
       const era=ERAS[winningEraId]||ERAS[ERA_IDS[0]];
       const resultData=trFn(lang,'results.'+winningEraId)||{title:era.archetype,desc:era.description,track:era.healingTrack.title};
+      const isHYYH=winningEraId==='HYYH';
+      const hyyhData=isHYYH?trFn(lang,'ui.hyyh')||null:null;
       return h('div',{className:'relative min-h-screen w-full overflow-hidden',style:{background:'linear-gradient(135deg, '+era.colorPrimary+', '+era.colorSecondary+')'}},
         h('div',{className:'grain-overlay'}),
         h('div',{className:'bg-microcosmos'}),
@@ -597,7 +657,19 @@
                 h(m.h2,{className:'text-2xl sm:text-3xl font-bold text-white mb-2',style:{fontFamily:'Playfair Display, Georgia, serif'},initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.1,duration:0.5}},trFn(lang,'ui.analysis')||'Soul Analysis'),
                 h(m.p,{className:'text-white/50 text-sm mb-10 font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.15,duration:0.5}},resultData.title+' · '+era.name),
                 h('div',{className:'space-y-6 mb-10'},
-                  era.analysisParagraphs.map((p,i)=>h(m.p,{key:i,className:'text-white/80 text-base leading-relaxed font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.2+i*0.15,duration:0.5}},p))
+                  isHYYH&&hyyhData
+                    ? h('div',{className:'space-y-6'},
+                        h(m.p,{className:'text-white/80 text-base leading-relaxed font-light italic',style:{fontFamily:'Playfair Display, Georgia, serif'},initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.2,duration:0.5}},hyyhData.analysis),
+                        h(m.div,{className:'p-5 rounded-xl bg-white/5 border-l-2 border-purple-400/40',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.35,duration:0.5}},
+                          h('p',{className:'text-white/70 text-sm leading-relaxed font-light italic mb-2',style:{fontFamily:'Playfair Display, Georgia, serif'}},'\u201C'+hyyhData.quote_jimin+'\u201D'),
+                          h('p',{className:'text-white/40 text-xs font-light'},'— Jimin, Weverse Interview')
+                        ),
+                        h(m.div,{className:'p-5 rounded-xl bg-white/5 border-l-2 border-purple-400/40',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.5,duration:0.5}},
+                          h('p',{className:'text-white/70 text-sm leading-relaxed font-light italic mb-2',style:{fontFamily:'Playfair Display, Georgia, serif'}},'\u201C'+hyyhData.quote_v+'\u201D'),
+                          h('p',{className:'text-white/40 text-xs font-light'},'— V, Weverse Interview')
+                        )
+                      )
+                    : (resultData.analysis||era.analysisParagraphs).map((p,i)=>h(m.p,{key:i,className:'text-white/80 text-base leading-relaxed font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.2+i*0.15,duration:0.5}},p))
                 ),
                 h(m.div,{className:'p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.6,duration:0.5}},
                   h('h3',{className:'text-white/60 text-xs font-light tracking-[0.2em] uppercase mb-3'},trFn(lang,'ui.healing')||'Healing Track'),
@@ -616,6 +688,90 @@
       );
     }
 
+    // ===== CONFETTI HELPER =====
+    function triggerConfetti(count=42){
+      const container=document.createElement('div');
+      container.className='confetti-container';
+      document.body.appendChild(container);
+      const colors=['#DDA0DD','#9370DB','#8B5CF6','#FF69B4','#E6E6FA','#BA55D3','#9932CC'];
+      for(let i=0;i<count;i++){
+        const petal=document.createElement('div');
+        petal.className='petal';
+        const x=Math.random()*100;
+        const dur=2+Math.random()*3;
+        const delay=Math.random()*1.5;
+        const size=8+Math.random()*10;
+        const color=colors[Math.floor(Math.random()*colors.length)];
+        petal.style.setProperty('--x',x+'%');
+        petal.style.setProperty('--fall-duration',dur+'s');
+        petal.style.animationDelay=delay+'s';
+        petal.style.width=size+'px';
+        petal.style.height=size+'px';
+        petal.style.background=color;
+        petal.style.boxShadow='0 0 6px '+color+'88';
+        container.appendChild(petal);
+      }
+      setTimeout(()=>{if(container.parentNode)container.parentNode.removeChild(container);},6000);
+    }
+
+    // ===== WHALIEN 52 SVG =====
+    function Whalien52({show}){
+      if(!show)return null;
+      return h('div',{className:'whale-container'},
+        h('svg',{viewBox:'0 0 200 100',className:'whale-svg pulsing',xmlns:'http://www.w3.org/2000/svg'},
+          h('path',{d:'M20 60 Q40 30 80 40 Q100 35 120 45 Q140 30 170 40 L180 50 Q190 55 180 60 L170 65 Q140 75 120 65 Q100 75 80 65 Q40 70 20 60 Z',fill:'rgba(100,149,237,0.15)',stroke:'rgba(100,149,237,0.3)',strokeWidth:'1'}),
+          h('circle',{cx:'50',cy:'55',r:'2',fill:'rgba(100,149,237,0.4)'}),
+          h('path',{d:'M170 40 Q185 30 195 35 Q190 45 180 50',fill:'rgba(100,149,237,0.1)',stroke:'rgba(100,149,237,0.2)',strokeWidth:'0.5'}),
+          h('text',{x:'70',y:'48','font-size':'6',fill:'rgba(100,149,237,0.2)','font-family':'Inter,sans-serif'},'52'),
+          h('circle',{cx:'90',cy:'50',r:'1',fill:'rgba(100,149,237,0.2)'}),
+          h('circle',{cx:'110',cy:'48',r:'0.8',fill:'rgba(100,149,237,0.15)'}),
+          h('circle',{cx:'130',cy:'52',r:'1.2',fill:'rgba(100,149,237,0.1)'})
+        )
+      );
+    }
+
+    // ===== PROOF EASTER EGG OVERLAY =====
+    function ProofOverlay({show,onClose,tr:trFn,lang}){
+      const [visible,setVisible]=useState(false);
+      useEffect(()=>{
+        if(show){
+          setVisible(true);
+          // Auto-close after 7 seconds
+          const t=setTimeout(()=>{
+            setVisible(false);
+            setTimeout(onClose,800);
+          },7000);
+          return()=>clearTimeout(t);
+        }else{
+          setVisible(false);
+        }
+      },[show]);
+      if(!show&&!visible)return null;
+      return h(AP,null,
+        (show||visible)&&h(m.div,{key:'proof-overlay',className:'proof-overlay',
+          initial:{opacity:0},
+          animate:{opacity:1},
+          exit:{opacity:0},
+          transition:{duration:0.6,ease:[0.22,1,0.36,1]}},
+          // Close button
+          h('button',{onClick:()=>{setVisible(false);setTimeout(onClose,800);},className:'close-btn'},'\u2715'),
+          // 7-star constellation forming a "7"
+          h('div',{className:'star-constellation'},
+            Array.from({length:7}).map((_,i)=>h('div',{key:i,className:'star-7'}))
+          ),
+          // Whale silhouettes floating upward
+          Array.from({length:5}).map((_,i)=>h('svg',{key:'whale-'+i,viewBox:'0 0 200 100',className:'whale-silhouette',xmlns:'http://www.w3.org/2000/svg'},
+            h('path',{d:'M20 60 Q40 30 80 40 Q100 35 120 45 Q140 30 170 40 L180 50 Q190 55 180 60 L170 65 Q140 75 120 65 Q100 75 80 65 Q40 70 20 60 Z',fill:'rgba(100,149,237,0.12)',stroke:'rgba(100,149,237,0.2)',strokeWidth:'0.5'})
+          )),
+          // Title
+          h(m.div,{initial:{opacity:0,y:30,filter:'blur(10px)'},animate:{opacity:1,y:0,filter:'blur(0px)'},transition:{delay:0.3,duration:0.8,ease:[0.22,1,0.36,1]}},
+            h('h1',{className:'title'},trFn(lang,'ui.bulletproof')||'We Are Bulletproof'),
+            h('p',{className:'subtitle'},'The Door to 2025')
+          )
+        )
+      );
+    }
+
     // ===== APP =====
     function App(){
       const [screen,setScreen]=useState('intro');
@@ -623,14 +779,88 @@
       const [lang,setLang]=useState('en');
       const [langOpen,setLangOpen]=useState(false);
       const [soundActive,setSoundActive]=useState(false);
+      const [showWhale,setShowWhale]=useState(false);
+      const [proofClicks,setProofClicks]=useState(0);
+      const [proofLastClick,setProofLastClick]=useState(0);
+      const [showProofOverlay,setShowProofOverlay]=useState(false);
+      const volumeRef=useRef(1.0);
       const handleStart=useCallback(()=>setScreen('quiz'),[]);
-      const handleComplete=useCallback((eraId)=>{setWinningEra(eraId);setScreen('result');},[]);
-      const handleRestart=useCallback(()=>{setWinningEra('');setScreen('intro');},[]);
+      const handleComplete=useCallback((eraId)=>{
+        setWinningEra(eraId);
+        setScreen('result');
+        // Dynamic volume transition: 1.0 -> 0.4 on "Reveal Soul"
+        volumeRef.current=0.4;
+        const audio=document.querySelector('audio');
+        if(audio){
+          const fade=()=>{
+            if(audio.volume>0.4){
+              audio.volume=Math.max(audio.volume-0.02,0.4);
+              requestAnimationFrame(fade);
+            }
+          };
+          fade();
+        }
+        // Start Whalien 52 timer
+        setTimeout(()=>setShowWhale(true),52000);
+      },[]);
+      const handleRestart=useCallback(()=>{
+        setWinningEra('');
+        setScreen('intro');
+        setShowWhale(false);
+        volumeRef.current=1.0;
+      },[]);
+      const handleProofClick=useCallback(()=>{
+        const now=Date.now();
+        if(now-proofLastClick<2000){
+          const next=proofClicks+1;
+          setProofClicks(next);
+          if(next>=7){
+            // Show the Proof Easter Egg overlay
+            setShowProofOverlay(true);
+            // Volume swell to 0.8 for 7 seconds
+            volumeRef.current=0.8;
+            const audio=document.querySelector('audio');
+            if(audio){
+              const swell=()=>{
+                if(audio.volume<0.8){
+                  audio.volume=Math.min(audio.volume+0.05,0.8);
+                  requestAnimationFrame(swell);
+                }
+              };
+              swell();
+            }
+            // After 7 seconds, fade back to 0.4
+            setTimeout(()=>{
+              volumeRef.current=0.4;
+              const audio2=document.querySelector('audio');
+              if(audio2){
+                const fadeBack=()=>{
+                  if(audio2.volume>0.4){
+                    audio2.volume=Math.max(audio2.volume-0.02,0.4);
+                    requestAnimationFrame(fadeBack);
+                  }
+                };
+                fadeBack();
+              }
+            },7000);
+            setProofClicks(0);
+          }
+        }else{
+          setProofClicks(1);
+        }
+        setProofLastClick(now);
+      },[proofClicks,proofLastClick]);
+      const handleCloseOverlay=useCallback(()=>{
+        setShowProofOverlay(false);
+      },[]);
       const trFn=tr;
       return h('main',{className:'relative min-h-screen w-full overflow-hidden bg-black'},
+        h('div',{className:'proof-matte'}),
+        h(Whalien52,{show:showWhale}),
+        h(ProofOverlay,{show:showProofOverlay,onClose:handleCloseOverlay,tr:trFn,lang}),
         h('div',{className:'fixed top-4 right-4 z-50 flex items-center gap-3'},
           h('div',{style:{position:'relative',display:'inline-block'}},
-            h('svg',{viewBox:'0 0 100 100',className:'proof-logo',onClick:()=>setLangOpen(o=>!o)},
+            h('svg',{viewBox:'0 0 100 100',className:'proof-logo',onClick:(e)=>{handleProofClick();setLangOpen(o=>!o);}},
               h('path',{d:'M25 20 L45 25 L45 75 L25 80 Z',fill:'currentColor'}),
               h('path',{d:'M55 25 L75 20 L75 80 L55 75 Z',fill:'currentColor'})
             ),
@@ -641,7 +871,7 @@
               ))
             )
           ),
-          h(Soundscape,{active:soundActive,onToggle:()=>setSoundActive(s=>!s)})
+          h(AudioPlayer,{active:soundActive,onToggle:()=>setSoundActive(s=>!s),volumeRef})
         ),
         h(AP,null,
           screen==='intro'&&h(IntroScreen,{key:'intro',onStart:handleStart,tr:trFn,lang}),
