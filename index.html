@@ -1,293 +1,659 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Echoes of the Microcosmos — A BTS Soul-Migration Test</title>
   <meta name="description" content="Discover your BTS soul archetype through a cinematic 13-question journey across 8 eras." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config={theme:{extend:{animation:{'soul-pulse':'soulPulse 4s ease-in-out infinite','float':'float 6s ease-in-out infinite','grain':'grain 0.5s steps(4) infinite'},keyframes:{soulPulse:{'0%,100%':{opacity:'0.4',transform:'scale(1)'},'50%':{opacity:'0.8',transform:'scale(1.05)'}},float:{'0%,100%':{transform:'translateY(0px)'},'50%':{transform:'translateY(-20px)'}},grain:{'0%,100%':{transform:'translate(0,0)'},'10%':{transform:'translate(-5%,-5%)'},'20%':{transform:'translate(-10%,5%)'},'30%':{transform:'translate(5%,-10%)'},'40%':{transform:'translate(-5%,15%)'},'50%':{transform:'translate(-10%,5%)'},'60%':{transform:'translate(15%,0)'},'70%':{transform:'translate(0,10%)'},'80%':{transform:'translate(-15%,0)'},'90%':{transform:'translate(10%,5%)'}}}}}};
+    tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],serif:['Playfair Display','Georgia','serif']},animation:{'soul-pulse':'soulPulse 4s ease-in-out infinite','grain':'grain 0.5s steps(4) infinite','typewriter':'typewriter 3s steps(40) forwards','fade-in':'fadeIn 1s ease-out forwards','float':'float 6s ease-in-out infinite','door-open':'doorOpen 1.5s ease-out forwards'},keyframes:{soulPulse:{'0%,100%':{opacity:'0.4',transform:'scale(1)'},'50%':{opacity:'0.8',transform:'scale(1.05)'}},grain:{'0%,100%':{transform:'translate(0,0)'},'10%':{transform:'translate(-5%,-5%)'},'20%':{transform:'translate(-10%,5%)'},'30%':{transform:'translate(5%,-10%)'},'40%':{transform:'translate(-5%,15%)'},'50%':{transform:'translate(-10%,5%)'},'60%':{transform:'translate(15%,0)'},'70%':{transform:'translate(0,10%)'},'80%':{transform:'translate(-15%,0)'},'90%':{transform:'translate(10%,5%)'}},typewriter:{'0%':{width:'0%'},'100%':{width:'100%'}},fadeIn:{'0%':{opacity:'0',transform:'translateY(10px)'},'100%':{opacity:'1',transform:'translateY(0)'}},float:{'0%,100%':{transform:'translateY(0)'},'50%':{transform:'translateY(-10px)'}},doorOpen:{'0%':{transform:'perspective(600px) rotateY(0deg) scale(1)'},'50%':{transform:'perspective(600px) rotateY(-15deg) scale(0.95)'},'100%':{transform:'perspective(600px) rotateY(-90deg) scale(0.8)',opacity:'0'}}}}}};
   </script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/framer-motion@11/dist/framer-motion.js"></script>
+  <script src="https://unpkg.com/framer-motion@11.0.0/dist/framer-motion.js"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
-    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden;background:#000;color:#fff}
+    body{min-height:100vh;font-family:'Inter',system-ui,sans-serif;color:#fff;background:#000;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    button,input{font:inherit}
+    button{cursor:pointer;border:none;background:none;color:inherit}
+    a{color:inherit;text-decoration:none}
     ::-webkit-scrollbar{width:4px}
     ::-webkit-scrollbar-track{background:transparent}
     ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:2px}
     ::selection{background:rgba(139,92,246,0.3);color:#fff}
-    button{cursor:pointer;border:none;background:none;font-family:inherit;color:inherit}
-    a{color:inherit;text-decoration:none}
-    .grain-overlay{position:fixed;inset:0;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");animation:grain .5s steps(4) infinite}
+    .grain-overlay{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");animation:grain .5s steps(4) infinite}
+    .bg-microcosmos{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:0.08;background-image:url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='mc' x='0' y='0' width='100' height='100' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='2' cy='2' r='1' fill='rgba(255,255,255,0.12)'/%3E%3Cline x1='2' y1='2' x2='50' y2='50' stroke='rgba(255,255,255,0.04)' stroke-width='0.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23mc)'/%3E%3C/svg%3E");animation:float 6s ease-in-out infinite}
+    .bg-smeraldo-seven{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:0.06;background-image:url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='0.5' transform='scale(0.5) translate(50,50)'/%3E%3Ctext x='80%25' y='80%25' font-family='Arial' font-size='120' fill='rgba(255,255,255,0.03)'%3E7%3C/text%3E%3C/svg%3E");background-size:300px 300px;transition:opacity 2s ease}
+    .bg-smeraldo-seven.active{opacity:0.1}
+    .proof-logo{width:36px;height:36px;cursor:pointer;color:rgba(255,255,255,0.7);transition:color .3s,transform .3s}
+    .proof-logo:hover{color:rgba(255,255,255,1);transform:scale(1.05)}
+    .proof-logo.loading{width:64px;height:64px;color:rgba(139,92,246,0.8);animation:doorOpen 1.5s ease-out forwards}
+    .lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:140px;background:rgba(255,255,255,0.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:6px;z-index:60;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
+    .lang-dropdown-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px 12px;border-radius:8px;font-size:0.8rem;color:rgba(255,255,255,0.6);transition:all .2s;text-align:left}
+    .lang-dropdown-item:hover{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.9)}
+    .lang-dropdown-item.active{background:rgba(139,92,246,0.2);color:#fff}
+    .lang-flag{font-size:1rem;width:20px;text-align:center}
+    .typewriter{overflow:hidden;white-space:nowrap;border-right:2px solid rgba(255,255,255,0.3);animation:typewriter 3s steps(40) forwards,blink-caret .75s step-end infinite;display:inline-block;max-width:100%}
+    @keyframes blink-caret{from,to{border-color:transparent}50%{border-color:rgba(255,255,255,0.3)}}
+    .soundscape-btn{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);transition:all .3s;font-size:1.1rem}
+    .soundscape-btn:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.3);box-shadow:0 0 20px rgba(139,92,246,0.2)}
+    .soundscape-btn.active{background:rgba(139,92,246,0.2);border-color:rgba(139,92,246,0.4);box-shadow:0 0 20px rgba(139,92,246,0.3)}
     #particle-canvas{position:fixed;inset:0;pointer-events:none;z-index:50}
+    #loading-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:9999;transition:opacity .8s ease}
+    #loading-screen.hidden{opacity:0;pointer-events:none}
+    .loading-text{color:rgba(255,255,255,0.3);font-size:0.7rem;letter-spacing:0.3em;margin-top:24px;font-weight:300;animation:fadeIn 1s ease-out 0.5s both}
+    .bg-crossfade{transition:background 2s ease}
   </style>
 </head>
-<body><div id="root"></div>
-<script type="text/babel">
-const {useState,useCallback,useMemo,useEffect,useRef}=React;
-const {motion,AnimatePresence}=window.Motion;
+<body>
+  <div id="loading-screen">
+    <svg viewBox="0 0 100 100" class="proof-logo loading">
+      <path d="M25 20 L45 25 L45 75 L25 80 Z" fill="currentColor" />
+      <path d="M55 25 L75 20 L75 80 L55 75 Z" fill="currentColor" />
+    </svg>
+    <p class="loading-text">ECHOES OF THE MICROCOSMOS</p>
+  </div>
+  <div id="root"></div>
+  <script type="text/babel">
+    // ===== LOADING =====
+    window.addEventListener('load',()=>{
+      const s=document.getElementById('loading-screen');
+      if(s)setTimeout(()=>s.classList.add('hidden'),1800);
+    });
 
-// ===== DATA =====
-const ERAS=[
-{id:"rebellious-noir",name:"Rebellious Noir",archetype:"The Defiant Rebel",colorPrimary:"#000000",colorSecondary:"#B22222",colorAccent:"#8B0000",description:"Born from fire and defiance. You carry the spirit of 'No More Dream' — the courage to question the system and forge your own path against all odds.",analysisParagraphs:["Your soul resonates with the raw, unpolished energy of BTS's debut era. Like the boys who stood on that stage in 2013 with 'No More Dream,' you refuse to be boxed in by society's expectations. RM once said, 'Your dream is the map of your life,' and you've taken that literally — charting your own course even when the world told you to follow the beaten path.","The 'Rebellious Noir' archetype is marked by a fierce independence and an unshakeable belief in your own voice. You see through the illusions of the 'success criteria' that society tries to impose, much like the defiant stance in 'N.O' and 'We Are Bulletproof Pt.2.' Your strength lies in your ability to stand alone, to be the bulletproof shield for your own convictions.","Yet beneath that hardened exterior lies a vulnerability — the knowledge that rebellion is often born from pain. Suga once reflected, 'If you don't work hard, there won't be results,' and your journey has been one of relentless effort. Your challenge now is to channel that fire not just against what you oppose, but toward what you truly love."],healingTrack:{title:"We Are Bulletproof: The Eternal",artist:"BTS",youtubeUrl:"https://youtube.com/watch?v=7UWBYJQILQE"},keywords:["defiant","rebellious","fierce","independent","bulletproof"]},
-{id:"ethereal-youth",name:"Ethereal Youth (HYYH)",archetype:"The Sensitive Idealist",colorPrimary:"#FF7F50",colorSecondary:"#FF6347",colorAccent:"#FFD700",description:"You live in the space between a fading sunset and the deep sea — nostalgic, dreamy, and achingly beautiful. The '花樣年華' (HYYH) era runs through your veins.",analysisParagraphs:["Your soul belongs to the 'Most Beautiful Moment in Life' — that fleeting, bittersweet chapter where youth is both a blessing and a curse. Like the narrative of 'I Need U' and 'Run,' you understand that the most beautiful moments are often the most painful. You feel things deeply, perhaps too deeply, and that sensitivity is both your greatest gift and your heaviest burden.","The 'Sensitive Idealist' archetype is defined by a longing for meaning in a world that often feels chaotic. You see beauty in the mundane — the way light hits a window, the sound of rain, the texture of an old photograph. V once said, 'It's okay to be sad. It's okay to not be okay,' and those words resonate with your core. You don't run from sadness; you sit with it, learn from it, and transform it into art.","Your journey mirrors the HYYH narrative — a search for identity in the liminal space between childhood and adulthood. Jimin's words echo here: 'I want to be a person who gives comfort to others.' You have a natural inclination to heal, to nurture, to hold space for others' pain. But remember: even the most beautiful moment in life requires you to be present for your own story too."],healingTrack:{title:"Spring Day",artist:"BTS",youtubeUrl:"https://youtube.com/watch?v=xEeFrLSkMm8"},keywords:["nostalgic","sensitive","dreamy","bittersweet","healing"]},
-{id:"baroque-decadence",name:"Baroque Decadence (Wings)",archetype:"The Passionate Alchemist",colorPrimary:"#8B008B",colorSecondary:"#008080",colorAccent:"#FFD700",description:"You are a creature of transformation — part sinner, part saint. The 'Wings' era speaks to your ability to confront darkness and emerge with something beautiful.",analysisParagraphs:["Your soul carries the weight of 'Blood Sweat & Tears' — the understanding that great beauty requires great sacrifice. You are drawn to the Baroque, to the ornate, to the things that are both sacred and profane. Like the members who explored their individual shadows in the 'Wings' solos, you are not afraid to look into the abyss and find art there.","The 'Passionate Alchemist' archetype transforms pain into power. You understand that temptation is not something to be feared but to be understood. Jungkook's 'Begin' speaks to your journey — the realization that love can be both salvation and destruction. You've tasted both, and you've learned that the only way out is through.","Your path is one of integration — bringing together the light and shadow, the sacred and the sensual. As RM reflected during this era, 'Pain is a gift. Without it, we wouldn't know joy.' Your challenge is to embrace the full spectrum of your humanity, to let your wings carry you not above the world, but deeper into it."],healingTrack:{title:"Blood Sweat & Tears",artist:"BTS",youtubeUrl:"https://youtube.com/watch?v=hmE9f-TEutc"},keywords:["passionate","transformative","alchemical","shadow-work","decadent"]},
-{id:"chromatic-self-love",name:"Chromatic Self-Love (Love Yourself)",archetype:"The Radiant Healer",colorPrimary:"#E6E6FA",colorSecondary:"#9370DB",colorAccent:"#FF69B4",description:"You've walked through the storm and learned to love yourself. The 'Love Yourself' era pulses through you — a holographic prism of self-discovery and acceptance.",analysisParagraphs:["Your soul has been shaped by the journey from 'Love Yourself: Her' to 'Answer' — a complete arc of falling, healing, and rising. You understand that self-love is not a destination but a practice, a daily choice to look in the mirror and say, 'You are enough.' Like the narrative of 'Euphoria' and 'Epiphany,' you've learned that the person you've been waiting for is yourself.","The 'Radiant Healer' archetype shines with a gentle, holographic light. You have the rare ability to see the beauty in others, often before they see it in themselves. Jin's 'Epiphany' captures your essence: 'I'm the one I should love in this world.' You've learned that healing radiates outward — that by loving yourself, you give others permission to do the same.","Your journey is one of integration — bringing together the fragmented pieces of your identity into a coherent, beautiful whole. As RM said during the LY era, 'There is no answer. The answer is within you.' You carry this wisdom like a lantern, illuminating the path for others while continuing to walk your own."],healingTrack:{title:"Epiphany",artist:"BTS (Jin)",youtubeUrl:"https://youtube.com/watch?v=fIkZOLsnoqY"},keywords:["healing","self-love","radiant","gentle","acceptance"]},
-{id:"jungian-depth",name:"Jungian Depth (Map of the Soul)",archetype:"The Philosophical Explorer",colorPrimary:"#2F4F4F",colorSecondary:"#4682B4",colorAccent:"#C0C0C0",description:"You are a cartographer of the inner world. The 'Map of the Soul' era calls you to explore the shadow, the persona, and the ego — and to find your true self beneath it all.",analysisParagraphs:["Your soul is drawn to the depths — to the Jungian concepts that BTS so masterfully wove into their 'Map of the Soul' series. You understand that the persona is not a lie but a necessary interface with the world, and that the shadow is not an enemy but a teacher. 'Black Swan' speaks to your fear of losing your creative spark, and your determination to keep creating anyway.","The 'Philosophical Explorer' archetype is never satisfied with surface-level answers. You ask the hard questions: Who am I? What is my purpose? What am I afraid of? Like RM's intro 'Persona,' you grapple with the question, 'Who the hell am I?' — not as a crisis, but as a lifelong inquiry. Your strength is your intellectual curiosity and your willingness to sit with uncertainty.","Your journey is one of individuation — the process of becoming your true self. Suga's 'Shadow' captures your struggle: the fear of success, the weight of expectations, the desire to be both seen and hidden. But as the album teaches us, only by integrating our shadow can we become whole. Your path is not about perfection but about authenticity."],healingTrack:{title:"Black Swan",artist:"BTS",youtubeUrl:"https://youtube.com/watch?v=0lapF4DQPKQ"},keywords:["philosophical","introspective","shadow-work","authentic","depth"]},
-{id:"healing-domesticity",name:"Healing Domesticity (BE)",archetype:"The Gentle Anchor",colorPrimary:"#708090",colorSecondary:"#F5F5F5",colorAccent:"#FFE4E1",description:"You are the calm in the storm, the warm light in a cold room. The 'BE' era reflects your understanding that healing is found in life's simplest, most intimate moments.",analysisParagraphs:["Your soul carries the quiet wisdom of the 'BE' era — an album born from a time of global pause and personal reflection. You understand that healing doesn't always come in grand gestures but in the small, sacred rituals of daily life. 'Life Goes On' is your anthem: a gentle reminder that even when the world stops, we find ways to keep going, together.","The 'Gentle Anchor' archetype is the friend everyone turns to in times of need. Like Jin's 'Moon' or Jungkook's 'Still With You,' you have a stabilizing presence that makes others feel safe. You find beauty in domesticity — in shared meals, in quiet conversations, in the comfort of being truly seen by someone who loves you.","Your journey has taught you that vulnerability is not weakness but the foundation of true connection. As RM said during the BE era, 'It's okay to say that you're not okay.' You've learned to hold space for your own pain and for others', creating a sanctuary of acceptance. Your gift is your ability to make the people around you feel at home."],healingTrack:{title:"Life Goes On",artist:"BTS",youtubeUrl:"https://youtube.com/watch?v=-5q5m8be1Vk"},keywords:["gentle","anchoring","healing","intimate","comforting"]},
-{id:"eternal-legacy",name:"Eternal Legacy (Proof)",archetype:"The Timeless Archivist",colorPrimary:"#1A1A40",colorSecondary:"#DDA0DD",colorAccent:"#FFD700",description:"You are a keeper of stories, a weaver of legacies. The 'Proof' era resonates with your understanding that some things transcend time — love, art, and the bonds we forge.",analysisParagraphs:["Your soul understands the weight of legacy. The 'Proof' anthology is not just a collection of songs but a testament to a journey — and you see your own life the same way. Every chapter, every struggle, every triumph is part of a larger narrative that you are still writing. 'Yet To Come' is your creed: the best moments are still ahead.","The 'Timeless Archivist' archetype honors the past while looking toward the future. You understand that where you come from shapes who you become, but it doesn't define where you're going. Like the members who looked back on their decade-long journey with gratitude and anticipation, you carry your history with grace, using it as a foundation rather than a cage.","Your journey is one of integration — bringing together all the versions of yourself into a coherent whole. As the members reflected in 'Proof,' the answer to 'Who am I?' is not a single moment but an entire lifetime of becoming. Your gift is your ability to see the through-line in your own story and to inspire others to find theirs."],healingTrack:{title:"Yet To Come",artist:"BTS",youtubeUrl:"https://youtube.com/watch?v=9Hoq3X3Y6eE"},keywords:["timeless","legacy","reflective","hopeful","archival"]},
-{id:"individual-together",name:"Individual & Together (Chapter 2)",archetype:"The Cosmic Weaver",colorPrimary:"#191970",colorSecondary:"#DDA0DD",colorAccent:"#FFD700",description:"You embody the paradox of being both an individual and part of something greater. 'Chapter 2' speaks to your journey of self-discovery within the constellation of community.",analysisParagraphs:["Your soul resonates with the energy of 'Chapter 2' — the era where each member explored their individual artistry while remaining connected to the whole. You understand that true freedom is not about going alone but about knowing you can stand on your own while still choosing to be part of something larger. Like the members' solo journeys, you've learned that individuality and togetherness are not opposites but complements.","The 'Cosmic Weaver' archetype moves between worlds with grace. You've explored your own path — like J-Hope's 'Jack In The Box,' RM's 'Indigo,' Agust D's 'D-DAY,' or Jungkook's 'GOLDEN' — and you've discovered that your individual voice only grows stronger when shared. You are both a star and part of a constellation, shining alone and together.","Your journey is one of expansion — not away from your roots but outward from them. As RM said of 'Indigo,' 'I wanted to show my 20s as honestly as possible.' You too are documenting your own chapter, knowing that the most authentic story is one that embraces both the individual notes and the harmony they create together."],healingTrack:{title:"Indigo (RM) / D-DAY (Agust D)",artist:"RM / Agust D",youtubeUrl:"https://youtube.com/watch?v=k3Wqj3j6vR0"},keywords:["individual","cosmic","connected","expansive","authentic"]}
-];
+    const {useState,useCallback,useMemo,useEffect,useRef,createElement:h}=React;
+    const motionLib=window.Motion||window.motion||{};
+    const m=motionLib.motion||{div:function(props){return h('div',props);}};
+    const AP=motionLib.AnimatePresence||function(props){return h(React.Fragment,null,props&&props.children);};
 
-const PHASES=[
-{id:1,name:"Rebellion",questions:[1,2],gradientStart:"#000000",gradientEnd:"#B22222"},
-{id:2,name:"HYYH / Wings",questions:[3,4,5],gradientStart:"#FF7F50",gradientEnd:"#008080"},
-{id:3,name:"Love Yourself / MOTS",questions:[6,7,8],gradientStart:"#E6E6FA",gradientEnd:"#4682B4"},
-{id:4,name:"BE / Healing",questions:[9,10],gradientStart:"#708090",gradientEnd:"#F5F5F5"},
-{id:5,name:"Proof / Future",questions:[11,12,13],gradientStart:"#1A1A40",gradientEnd:"#DDA0DD"}
-];
-function getPhase(qId){return PHASES.find(p=>p.questions.includes(qId))||PHASES[0]}
+    // ===== TRANSLATIONS (Deep-Sync: 8 Archetypes, 13 Questions, Full UI) =====
+    const LANG_ORDER=['en','ko','zh-CN','zh-TW'];
+    const LANG_META={en:{label:'English',flag:'🇺🇸'},ko:{label:'한국어',flag:'🇰🇷'},'zh-CN':{label:'简体中文',flag:'🇨🇳'},'zh-TW':{label:'繁體中文',flag:'🇹🇼'}};
 
-const QUESTIONS=[
-{id:1,chapter:"Rebellion",title:"The Standard",narrative:"You stand before a chalkboard covered in society's 'Success Criteria.' What do you do?",options:[{id:"1A",text:"Smash the chalkboard — redefine success on my own terms.",weights:[{eraId:"rebellious-noir",weight:3}]},{id:"1B",text:"Capture the moment on film — this struggle is part of my youth.",weights:[{eraId:"ethereal-youth",weight:3}]},{id:"1C",text:"Erase the criteria and write: 'Love yourself.'",weights:[{eraId:"chromatic-self-love",weight:3}]},{id:"1D",text:"Take a photo and keep it as proof of how far I've come.",weights:[{eraId:"eternal-legacy",weight:3}]}]},
-{id:2,chapter:"Rebellion",title:"The Hideout Item",narrative:"You find a hidden box in your childhood hideout. Inside is one item that defined your youth. Which is it?",options:[{id:"2A",text:"A worn lyrics book — pages filled with songs I wrote in the dark.",weights:[{eraId:"rebellious-noir",weight:2},{eraId:"healing-domesticity",weight:1}]},{id:"2B",text:"A film roll of undeveloped memories — moments I was too afraid to face.",weights:[{eraId:"ethereal-youth",weight:2},{eraId:"baroque-decadence",weight:1}]},{id:"2C",text:"An iron box of letters — words I never had the courage to send.",weights:[{eraId:"chromatic-self-love",weight:2},{eraId:"healing-domesticity",weight:1}]},{id:"2D",text:"A one-way ticket to a city I've never been — the future waiting.",weights:[{eraId:"jungian-depth",weight:2},{eraId:"individual-together",weight:1}]}]},
-{id:3,chapter:"HYYH / Wings",title:"The Sea Scaffolding",narrative:"You stand at the edge of a vast sea, a wooden scaffolding stretching before you. The waves crash below. What calls to you?",options:[{id:"3A",text:"Dive into the unknown — escape the shore, let the current take me.",weights:[{eraId:"rebellious-noir",weight:1},{eraId:"baroque-decadence",weight:2}]},{id:"3B",text:"Spread my arms and leap — not down, but forward, as if flying.",weights:[{eraId:"ethereal-youth",weight:1},{eraId:"baroque-decadence",weight:2}]},{id:"3C",text:"Stay on the scaffolding — let the sea air heal what's broken.",weights:[{eraId:"ethereal-youth",weight:2},{eraId:"healing-domesticity",weight:1}]},{id:"3D",text:"Accept the tide's rhythm — I can't control the sea, only how I ride it.",weights:[{eraId:"eternal-legacy",weight:2},{eraId:"jungian-depth",weight:1}]}]},
-{id:4,chapter:"HYYH / Wings",title:"The Brown Piano",narrative:"In an abandoned classroom, a brown upright piano sits covered in dust. You lift the lid and see sheet music. What do you play?",options:[{id:"4A",text:"A thunderous, ambitious chord — the sound of a dream that refuses to die.",weights:[{eraId:"rebellious-noir",weight:1},{eraId:"jungian-depth",weight:2}]},{id:"4B",text:"A tender, melancholic melody — first love, first loss, first everything.",weights:[{eraId:"ethereal-youth",weight:1},{eraId:"baroque-decadence",weight:2}]},{id:"4C",text:"A gentle, healing lullaby — music as medicine for a wounded heart.",weights:[{eraId:"chromatic-self-love",weight:2},{eraId:"healing-domesticity",weight:1}]},{id:"4D",text:"A complex, textured piece — each note a different color on a map of the soul.",weights:[{eraId:"jungian-depth",weight:1},{eraId:"individual-together",weight:2}]}]},
-{id:5,chapter:"HYYH / Wings",title:"The Door",narrative:"You find seven doors, each labeled with a different path. Which one do you open?",options:[{id:"5A",text:"The door marked 'Break Out' — I need to escape to find myself.",weights:[{eraId:"rebellious-noir",weight:2},{eraId:"baroque-decadence",weight:1}]},{id:"5B",text:"The door marked 'Stay Together' — we're stronger when we hold hands.",weights:[{eraId:"ethereal-youth",weight:2},{eraId:"healing-domesticity",weight:1}]},{id:"5C",text:"The door marked 'Face the Mirror' — I need to confront who I really am.",weights:[{eraId:"chromatic-self-love",weight:2},{eraId:"jungian-depth",weight:1}]},{id:"5D",text:"The door marked 'Say Farewell' — some chapters need to close.",weights:[{eraId:"eternal-legacy",weight:2},{eraId:"individual-together",weight:1}]}]},
-{id:6,chapter:"Love Yourself / MOTS",title:"The Mask",narrative:"You hold a beautiful mask in your hands. It's exquisite — almost perfect. What does it mean to you?",options:[{id:"6A",text:"It's suffocating — I need to tear it off and breathe.",weights:[{eraId:"rebellious-noir",weight:1},{eraId:"jungian-depth",weight:2}]},{id:"6B",text:"It preserves my beauty — but I'm tired of hiding the cracks.",weights:[{eraId:"baroque-decadence",weight:2},{eraId:"chromatic-self-love",weight:1}]},{id:"6C",text:"I've had an epiphany — the mask is not who I am.",weights:[{eraId:"chromatic-self-love",weight:3}]},{id:"6D",text:"The mask is my persona — a necessary part of who I show the world.",weights:[{eraId:"jungian-depth",weight:3}]}]},
-{id:7,chapter:"Love Yourself / MOTS",title:"The Hourglass",narrative:"Time is slipping through an hourglass. You have the power to pause it. Where do you freeze the moment?",options:[{id:"7A",text:"In the middle of a storm — chaos is where I feel most alive.",weights:[{eraId:"rebellious-noir",weight:1},{eraId:"baroque-decadence",weight:2}]},{id:"7B",text:"At a strawberry farm — simple, sweet, and full of warmth.",weights:[{eraId:"healing-domesticity",weight:3}]},{id:"7C",text:"In a practice room — sweat, mirrors, and the pursuit of perfection.",weights:[{eraId:"jungian-depth",weight:2},{eraId:"eternal-legacy",weight:1}]},{id:"7D",text:"At a train station — the moment of reunion after a long separation.",weights:[{eraId:"eternal-legacy",weight:2},{eraId:"individual-together",weight:1}]}]},
-{id:8,chapter:"Love Yourself / MOTS",title:"The Shadow",narrative:"Your shadow detaches from your feet and stands before you, alive. It speaks. What do you do?",options:[{id:"8A",text:"Dismiss it — I don't have time for my own darkness.",weights:[{eraId:"rebellious-noir",weight:1},{eraId:"jungian-depth",weight:2}]},{id:"8B",text:"Hold it tight — even my shadow deserves love.",weights:[{eraId:"chromatic-self-love",weight:2},{eraId:"healing-domesticity",weight:1}]},{id:"8C",text:"Embrace it and dance — light and shadow moving as one.",weights:[{eraId:"baroque-decadence",weight:2},{eraId:"jungian-depth",weight:1}]},{id:"8D",text:"Let it grow independently — my shadow has its own journey.",weights:[{eraId:"individual-together",weight:3}]}]},
-{id:9,chapter:"BE / Healing",title:"The Blue Room",narrative:"You enter a room bathed in blue light. The walls are covered in memories. What do you add to the room?",options:[{id:"9A",text:"Rebel graffiti — a declaration that I survived this far.",weights:[{eraId:"rebellious-noir",weight:2},{eraId:"eternal-legacy",weight:1}]},{id:"9B",text:"A photo album — pages of moments that shaped who I am.",weights:[{eraId:"ethereal-youth",weight:2},{eraId:"healing-domesticity",weight:1}]},{id:"9C",text:"A dance solo — movement as the truest language of the soul.",weights:[{eraId:"baroque-decadence",weight:1},{eraId:"individual-together",weight:2}]},{id:"9D",text:"A map of my inner world — every scar, every joy, every question mapped.",weights:[{eraId:"jungian-depth",weight:2},{eraId:"chromatic-self-love",weight:1}]}]},
-{id:10,chapter:"BE / Healing",title:"The Window",narrative:"You look out a rain-streaked window. What do you see on the other side?",options:[{id:"10A",text:"Rain falling on empty streets — the beauty of melancholy.",weights:[{eraId:"ethereal-youth",weight:2},{eraId:"healing-domesticity",weight:1}]},{id:"10B",text:"The sea and the hideout — a place where I was truly free.",weights:[{eraId:"ethereal-youth",weight:1},{eraId:"healing-domesticity",weight:2}]},{id:"10C",text:"A field of Smeraldo flowers — a secret message meant for me.",weights:[{eraId:"chromatic-self-love",weight:2},{eraId:"eternal-legacy",weight:1}]},{id:"10D",text:"A blue bus heading to the future — and I'm ready to board.",weights:[{eraId:"individual-together",weight:3}]}]},
-{id:11,chapter:"Proof / Future",title:"The Telescope",narrative:"You look through a telescope and see not the stars, but versions of yourself across time. Which one do you focus on?",options:[{id:"11A",text:"My past self — the one who dreamed before knowing the cost.",weights:[{eraId:"ethereal-youth",weight:1},{eraId:"eternal-legacy",weight:2}]},{id:"11B",text:"The HYYH boy — young, scared, but full of beautiful moments.",weights:[{eraId:"ethereal-youth",weight:2},{eraId:"healing-domesticity",weight:1}]},{id:"11C",text:"The artist shadow — the version of me that creates from pain.",weights:[{eraId:"baroque-decadence",weight:1},{eraId:"jungian-depth",weight:2}]},{id:"11D",text:"The indigo galaxy — the vast, expansive self I'm becoming.",weights:[{eraId:"individual-together",weight:3}]}]},
-{id:12,chapter:"Proof / Future",title:"The Purple Balloon",narrative:"A purple balloon floats toward you, carrying a message tied to its string. What does the message say?",options:[{id:"12A",text:"'We Are Bulletproof' — a battle flag for everything we've overcome.",weights:[{eraId:"rebellious-noir",weight:2},{eraId:"eternal-legacy",weight:1}]},{id:"12B",text:"'Dear past me' — a letter of forgiveness to who I used to be.",weights:[{eraId:"chromatic-self-love",weight:2},{eraId:"healing-domesticity",weight:1}]},{id:"12C",text:"'You are enough' — a healing symbol for the wounds I still carry.",weights:[{eraId:"chromatic-self-love",weight:1},{eraId:"healing-domesticity",weight:2}]},{id:"12D",text:"'Purple, I love you' — a home signal, a reminder I'm never alone.",weights:[{eraId:"individual-together",weight:2},{eraId:"eternal-legacy",weight:1}]}]},
-{id:13,chapter:"Proof / Future",title:"The Station Screen",narrative:"You stand at a train station. The departure board flickers with four destinations. Your final choice determines everything. Where do you go?",options:[{id:"13A",text:"'We Are Bulletproof' — the path of eternal defiance and resilience.",weights:[{eraId:"rebellious-noir",weight:4}]},{id:"13B",text:"'HYYH / Moment' — the path of eternal youth and beautiful memories.",weights:[{eraId:"ethereal-youth",weight:4}]},{id:"13C",text:"'Soul Map' — the path of endless self-discovery and depth.",weights:[{eraId:"jungian-depth",weight:4}]},{id:"13D",text:"'Yet To Come' — the path of hope, legacy, and what lies ahead.",weights:[{eraId:"eternal-legacy",weight:4}]}]}
-];
-
-// ===== PARTICLE CANVAS =====
-function ParticleCanvas({trigger,mouseX,mouseY,phaseColor}){
-  const ref=useRef(null);
-  const particles=useRef([]);
-  const idRef=useRef(0);
-  useEffect(()=>{
-    const c=ref.current; if(!c)return;
-    const ctx=c.getContext('2d'); if(!ctx)return;
-    const resize=()=>{c.width=window.innerWidth;c.height=window.innerHeight};
-    resize(); window.addEventListener('resize',resize);
-    const colors=['#8B5CF6','#DDA0DD','#FF69B4','#E6E6FA','#FFD700','#9370DB'];
-    function burst(x,y){
-      for(let i=0;i<10;i++){
-        const a=Math.PI*2*i/10+Math.random()*0.5;
-        const v=2+Math.random()*4;
-        particles.current.push({id:idRef.current++,x,y,color:colors[Math.floor(Math.random()*colors.length)],size:3+Math.random()*5,angle:a,velocity:v,rotation:Math.random()*360,type:Math.random()>0.5?'ribbon':'ember'});
+    const TRANSLATIONS={
+      en:{
+        ui:{next:"Next",restart:"Remigrate",result:"Reveal Soul",lang:"English",start:"Begin Your Journey",again:"Take the Test Again",analysis:"Read Soul Analysis",back:"Back to Result",healing:"Healing Track",youtube:"Watch on YouTube",cont:"The story continues...",calc:"Calculating your soul archetype...",soundscape:"Soundscape",tagline:"Discover your BTS soul archetype through a cinematic 13-question journey across 8 eras.",title:"Echoes of the Microcosmos",subtitle:"A BTS Soul-Migration Test",score:"Your Soul Archetype",quotes:["The most beautiful moment in life is...","You never walk alone","Life goes on","The best is yet to come"]},
+        results:{
+          Rebel:{title:"The Unyielding Voice",desc:"You are a 'Challenger' who guards original dreams against societal pressure.",track:"No More Dream"},
+          HYYH:{title:"The Fragile Dreamer",desc:"You find beauty in growth pains and the 'most beautiful and painful' duality of youth.",track:"Spring Day"},
+          Wings:{title:"The Awakening Soul",desc:"You are a 'Philosopher' navigating the abyss between temptation and maturity.",track:"Blood Sweat & Tears"},
+          LY:{title:"The Sincere Healer",desc:"You have found the 'Epiphany' that loving oneself is the start of true love.",track:"Epiphany"},
+          MOTS:{title:"The Map-Maker",desc:"You seek the 'Map of the Soul,' integrating your Persona and Shadow.",track:"Black Swan"},
+          BE:{title:"The Warm Companion",desc:"You find comfort in the 'Life Goes On' resilience of everyday life.",track:"Life Goes On"},
+          Proof:{title:"The Eternal Witness",desc:"You believe 'The Best is Yet to Come' and cherish the anthology of your history.",track:"Yet To Come"},
+          Solo:{title:"The Galaxy Explorer",desc:"You are an independent star exploring your own 'Indigo' universe.",track:"Wild Flower"}
+        },
+        questions:[
+          {text:"Facing the 'Success Criteria' on a chalkboard, you feel:",options:["Defiance — I'll rewrite my own rules.","Nostalgia — this struggle is part of my youth.","Pressure to mask who I really am.","A sense of passage — this too shall become history."]},
+          {text:"In your childhood hideout, you find a hidden box. Inside is:",options:["A worn lyrics book — songs I wrote in the dark.","A film roll of undeveloped memories.","An iron box of letters I never sent.","A one-way ticket to a city I've never been."]},
+          {text:"You stand at the edge of a vast sea with a wooden scaffolding before you. What calls to you?",options:["Dive into the unknown — let the current take me.","Spread my arms and leap forward, as if flying.","Stay on the scaffolding — let the sea air heal me.","Accept the tide's rhythm — I can't control the sea."]},
+          {text:"In an abandoned classroom, a dusty brown piano waits. You lift the lid. What do you play?",options:["A thunderous, ambitious chord — a dream that refuses to die.","A tender, melancholic melody — first love, first loss.","A gentle, healing lullaby — music as medicine.","A complex, textured piece — each note a color on a soul map."]},
+          {text:"You find seven doors, each labeled with a different path. Which one do you open?",options:["'Break Out' — I need to escape to find myself.","'Stay Together' — we're stronger when we hold hands.","'Face the Mirror' — I need to confront who I really am.","'Say Farewell' — some chapters need to close."]},
+          {text:"You hold a beautiful mask in your hands. It's exquisite — almost perfect. What does it mean to you?",options:["It's suffocating — I need to tear it off and breathe.","It preserves my beauty — but I'm tired of hiding the cracks.","I've had an epiphany — the mask is not who I am.","The mask is my persona — a necessary part of who I show the world."]},
+          {text:"Time is slipping through an hourglass. You can pause it. Where do you freeze the moment?",options:["In the middle of a storm — chaos is where I feel alive.","At a strawberry farm — simple, sweet, full of warmth.","In a practice room — sweat, mirrors, perfection.","At a train station — reunion after long separation."]},
+          {text:"Your shadow detaches and stands before you, alive. It speaks. What do you do?",options:["Dismiss it — I don't have time for darkness.","Hold it tight — even my shadow deserves love.","Embrace it and dance — light and shadow as one.","Let it grow independently — my shadow has its own journey."]},
+          {text:"You enter a room bathed in blue light. The walls are covered in memories. What do you add?",options:["Rebel graffiti — a declaration that I survived.","A photo album — pages that shaped who I am.","A dance solo — movement as the truest language.","A map of my inner world — every scar and joy mapped."]},
+          {text:"You look out a rain-streaked window. What do you see on the other side?",options:["Rain on empty streets — the beauty of melancholy.","The sea and the hideout — a place where I was free.","A field of Smeraldo flowers — a secret message for me.","A blue bus heading to the future — I'm ready to board."]},
+          {text:"You look through a telescope and see versions of yourself across time. Which one do you focus on?",options:["My past self — the one who dreamed before knowing the cost.","The HYYH boy — young, scared, full of beautiful moments.","The artist shadow — the version that creates from pain.","The indigo galaxy — the vast self I'm becoming."]},
+          {text:"A purple balloon floats toward you with a message tied to its string. What does it say?",options:["'We Are Bulletproof' — a flag for all we've overcome.","'Dear past me' — a letter of forgiveness.","'You are enough' — healing for the wounds I carry.","'Purple, I love you' — a reminder I'm never alone."]},
+          {text:"You stand at a train station. The departure board flickers. Your final choice. Where do you go?",options:["'We Are Bulletproof' — the path of eternal defiance.","'HYYH / Moment' — the path of eternal youth.","'Soul Map' — the path of endless self-discovery.","'Yet To Come' — the path of hope and legacy."]}
+        ]
+      },
+      ko:{
+        ui:{next:"다음",restart:"다시 이동",result:"결과 보기",lang:"한국어",start:"여정 시작하기",again:"다시 테스트하기",analysis:"영혼 분석 읽기",back:"결과로 돌아가기",healing:"힐링 트랙",youtube:"YouTube에서 보기",cont:"이야기는 계속됩니다...",calc:"영혼 원형을 계산하는 중...",soundscape:"사운드스케이프",tagline:"13개의 질문으로 8개 시대를 거쳐 당신의 방탄소년단 영혼 원형을 발견하세요.",title:"Echoes of the Microcosmos",subtitle:"방탄소년단 영혼 이주 테스트",score:"당신의 영혼 원형",quotes:["인생에서 가장 아름다운 순간은...","혼자가 아니야","삶은 계속된다","최고의 순간은 아직 오지 않았다"]},
+        results:{
+          Rebel:{title:"굴하지 않는 목소리",desc:"당신은 사회적 압력에 맞서 초심을 지키는 '도전 활동가'입니다.",track:"No More Dream"},
+          HYYH:{title:"위태로운 드리머",desc:"당신은 청춘의 '가장 아름답고도 아픈' 이중성에서 미학을 발견합니다.",track:"봄날 (Spring Day)"},
+          Wings:{title:"각성하는 영혼",desc:"당신은 유혹과 성숙 사이의 심연을 항해하는 '철학자'입니다.",track:"피 땀 눈물"},
+          LY:{title:"진실된 치유자",desc:"자신을 사랑하는 것이 진정한 사랑의 시작임을 깨달은 '에피파니'의 소유자입니다.",track:"Epiphany"},
+          MOTS:{title:"영혼의 지도 제작자",desc:"페르소나와 그림자를 통합하여 '영혼의 지도'를 그려나갑니다.",track:"Black Swan"},
+          BE:{title:"따뜻한 동행자",desc:"멈춰버린 일상 속에서도 '삶은 계속된다'는 회복탄력성을 믿습니다.",track:"Life Goes On"},
+          Proof:{title:"영원한 증언자",desc:"우리의 역사를 소중히 여기며 '최고의 순간'을 기다립니다.",track:"Yet To Come"},
+          Solo:{title:"은하수 탐험가",desc:"독립적인 별이 되어 자신만의 '인디고' 우주를 탐험합니다.",track:"들꽃놀이 (Wild Flower)"}
+        },
+        questions:[
+          {text:"칠판에 적힌 '성공 기준' 앞에서, 당신은:",options:["반항한다 — 내 규칙을 다시 쓰겠다.","향수를 느낀다 — 이 고통도 청춘의 일부다.","진짜 나를 감춰야 한다는 압박을 느낀다.","시간의 흐름을 느낀다 — 이것도 역사가 될 것이다."]},
+          {text:"어린 시절 은신처에서 숨겨진 상자를 발견합니다. 그 안에는:",options:["낡은 가사 노트 — 어둠 속에서 쓴 노래들.","현상되지 않은 추억의 필름 롤.","보내지 못한 편지들이 든 철제 상자.","가본 적 없는 도시행 일방통행 티켓."]},
+          {text:"광활한 바다 앞에 나무 비계가 펼쳐져 있습니다. 당신을 부르는 것은?",options:["미지의 세계로 뛰어든다 — 흐름에 몸을 맡긴다.","팔을 펴고 앞으로 도약한다 — 마치 날아오르듯.","비계에 머문다 — 바닷바람이 나를 치유하게 한다.","파도의 리듬을 받아들인다 — 바다는 통제할 수 없으니."]},
+          {text:"버려진 교실, 먼지 쌓인 갈색 피아노. 뚜껑을 열면 악보가 보입니다. 무엇을 연주하나요?",options:["우렁찬 야망의 코드 — 죽지 않는 꿈.","부드럽고 우울한 멜로디 — 첫사랑, 첫 이별.","치유의 자장가 — 음악은 약이다.","복잡하고 질감 있는 곡 — 각 음표는 영혼 지도의 색깔."]},
+          {text:"일곱 개의 문, 각각 다른 길이 적혀 있습니다. 어느 문을 여나요?",options:["'탈출' — 나를 찾기 위해 도망쳐야 한다.","'함께' — 손을 잡으면 더 강해진다.","'거울' — 진짜 나와 마주해야 한다.","'작별' — 어떤 장은 닫아야 한다."]},
+          {text:"아름다운 가면을 손에 쥐고 있습니다. 정교하고 거의 완벽합니다. 이 가면은 당신에게 무엇인가요?",options:["숨이 막힌다 — 찢어버리고 숨 쉬고 싶다.","내 아름다움을 지켜주지만 — 금을 숨기는 데 지쳤다.","깨달았다 — 가면은 진짜 내가 아니다.","가면은 나의 페르소나다 — 세상에 보여주는 나의 일부."]},
+          {text:"모래시계가 흐르고 있습니다. 시간을 멈출 수 있다면, 어느 순간을 고정하나요?",options:["폭풍 한가운데 — 혼돈 속에서 살아있음을 느낀다.","딸기 농장 — 단순하고 달콤하며 따뜻하다.","연습실 — 땀, 거울, 완벽을 향한 추구.","기차역 — 긴 이별 후의 재회."]},
+          {text:"당신의 그림자가 분리되어 살아 움직입니다. 말을 걸어옵니다. 어떻게 하나요?",options:["무시한다 — 어둠을 마주할 시간이 없다.","꼭 안아준다 — 내 그림자도 사랑받을 자격이 있다.","껴안고 함께 춤춘다 — 빛과 그림자가 하나 되어.","혼자 자라게 둔다 — 그림자도 자신의 여정이 있다."]},
+          {text:"푸른 빛이 가득한 방으로 들어갑니다. 벽은 추억으로 덮여 있습니다. 무엇을 더하나요?",options:["반항의 낙서 — 내가 살아남았다는 선언.","사진 앨범 — 나를 만든 순간들.","솔로 댄스 — 움직임은 가장 진실된 언어.","내면 세계의 지도 — 모든 상처와 기쁨이 기록된."]},
+          {text:"빗물이 흐르는 창밖을 바라봅니다. 반대편에서 무엇이 보이나요?",options:["텅 빈 거리에 내리는 비 — 우울의 아름다움.","바다와 은신처 — 내가 자유로웠던 곳.","스메랄도 꽃밭 — 나를 위한 비밀 메시지.","미래로 향하는 파란 버스 — 탈 준비가 되었다."]},
+          {text:"망원경으로 시간을 넘어 다양한 자신의 모습을 봅니다. 어느 모습에 초점을 맞추나요?",options:["과거의 나 — 대가를 모르고 꿈꾸던 때.","화양연화 소년 — 젊고 두렵지만 아름다운 순간들.","예술가의 그림자 — 고통 속에서 창조하는 나.","인디고 은하 — 내가 되어가는 광활한 자아."]},
+          {text:"보라색 풍선이 메시지를 달고 다가옵니다. 무엇이라고 적혀있나요?",options:["'We Are Bulletproof' — 우리가 극복한 모든 것의 깃발.","'지난날의 나에게' — 용서의 편지.","'너는 충분해' — 내가 가진 상처를 위한 치유.","'보라, 사랑해' — 나는 혼자가 아니라는 신호."]},
+          {text:"기차역에 서 있습니다. 출발 안내판이 깜빡입니다. 마지막 선택입니다. 어디로 가나요?",options:["'We Are Bulletproof' — 영원한 저항의 길.","'화양연화 / 순간' — 영원한 청춘의 길.","'영혼의 지도' — 끝없는 자기 발견의 길.","'Yet To Come' — 희망과 유산의 길."]}
+        ]
+      },
+      'zh-CN':{
+        ui:{next:"下一步",restart:"重新迁徙",result:"揭晓灵魂",lang:"简体中文",start:"开始你的旅程",again:"重新测试",analysis:"阅读灵魂分析",back:"返回结果",healing:"治愈曲目",youtube:"在YouTube上观看",cont:"故事继续...",calc:"正在计算你的灵魂原型...",soundscape:"音景",tagline:"通过13道题目和8个时代的旅程，发现你的防弹少年团灵魂原型。",title:"Echoes of the Microcosmos",subtitle:"防弹少年团灵魂迁移测试",score:"你的灵魂原型",quotes:["人生中最美丽的瞬间是...","你从不孤单","生活仍在继续","最好的尚未到来"]},
+        results:{
+          Rebel:{title:"不屈的先声",desc:"你是守护最初梦想、对抗社会压力的\u201C挑战者\u201D。",track:"No More Dream"},
+          HYYH:{title:"脆弱的追梦人",desc:"你在\u201C最美与最痛\u201D的青春二元性中捕捉那转瞬即逝的灿烂。",track:"春日 (Spring Day)"},
+          Wings:{title:"觉醒的灵魂",desc:"你是航行于诱惑与成熟之间深渊的\u201C哲学家\u201D。",track:"血汗泪 (Blood Sweat & Tears)"},
+          LY:{title:"真诚的治愈者",desc:"你已领悟\u201CEpiphany\u201D——爱自己是真爱的起点。",track:"Epiphany"},
+          MOTS:{title:"灵魂地图绘制者",desc:"你整合人格面具与阴影，绘制自己的\u201C灵魂地图\u201D。",track:"Black Swan"},
+          BE:{title:"温暖的同行者",desc:"你在\u201CLife Goes On\u201D的日常韧性中找到慰藉。",track:"Life Goes On"},
+          Proof:{title:"永恒的见证者",desc:"你相信\u201C最好的尚未到来\u201D，珍惜你历史的选集。",track:"Yet To Come"},
+          Solo:{title:"银河探索者",desc:"你是一颗独立的星，探索属于自己的\u201CIndigo\u201D宇宙。",track:"野花 (Wild Flower)"}
+        },
+        questions:[
+          {text:"面对黑板上写着的\u201C成功标准\u201D，你感到：",options:["反抗——我要重新定义自己的规则。","怀旧——这场挣扎也是我青春的一部分。","隐藏真实自我的压力。","时光流逝感——这一切终将成为历史。"]},
+          {text:"在童年的秘密基地里，你发现了一个隐藏的盒子。里面是：",options:["一本破旧的歌词本——黑暗中写下的歌。","一卷未冲洗的回忆胶卷。","装满未寄出信件的铁盒。","一张去往陌生城市单程票。"]},
+          {text:"你站在浩瀚大海的边缘，面前是一座木制脚手架。什么在召唤你？",options:["跃入未知——随波逐流。","张开双臂向前飞跃——仿佛在飞翔。","留在脚手架上——让海风治愈我。","接受潮汐的节奏——我无法控制大海。"]},
+          {text:"废弃的教室里，一架落满灰尘的棕色钢琴。你掀开琴盖，看到乐谱。你弹奏什么？",options:["雷鸣般充满野心的和弦——不死的梦想。","温柔忧郁的旋律——初恋，初失。","治愈的摇篮曲——音乐是良药。","复杂有质感的曲子——每个音符都是灵魂地图上的色彩。"]},
+          {text:"你面前有七扇门，每扇门上都标着不同的路。你打开哪一扇？",options:["\u201C突破\u201D——我需要逃离才能找到自己。","\u201C在一起\u201D——牵手时我们更强大。","\u201C面对镜子\u201D——我需要直面真实的自己。","\u201C告别\u201D——有些篇章需要结束。"]},
+          {text:"你手中拿着一副精美的面具。它精致而近乎完美。这副面具对你意味着什么？",options:["令人窒息——我想撕掉它呼吸。","它保存了我的美丽——但我厌倦了隐藏裂痕。","我顿悟了——面具不是真正的我。","面具是我的persona——我向世界展示的那部分自我。"]},
+          {text:"时间正在沙漏中流逝。你可以暂停它。你冻结哪个瞬间？",options:["暴风雨中——混乱中我感到活着。","草莓农场——简单、甜蜜、温暖。","练习室——汗水、镜子、追求完美。","火车站——久别重逢。"]},
+          {text:"你的影子脱离身体，活生生地站在你面前。它开口说话。你怎么办？",options:["无视它——我没有时间面对黑暗。","紧紧抱住它——我的影子也值得被爱。","拥抱它一起跳舞——光与影合为一体。","让它独立成长——影子也有自己的旅程。"]},
+          {text:"你走进一间沐浴在蓝光中的房间。墙上覆盖着回忆。你添加什么？",options:["反叛涂鸦——宣告我 survived。","相册——塑造了我的那些瞬间。","独舞——动作是最真实的语言。","内心世界的地图——记录每一道伤痕和喜悦。"]},
+          {text:"你望向雨水流淌的窗外。对面你看到了什么？",options:["空荡荡的街道上的雨——忧郁之美。","大海和秘密基地——我曾经自由的地方。","一片Smeraldo花田——给我的秘密信息。","驶向未来的蓝色巴士——我准备好上车了。"]},
+          {text:"你透过望远镜看到不同时间线上的自己。你聚焦于哪一个？",options:["过去的我——那个不知代价就做梦的我。","花样年华的少年——年轻、害怕、却充满美好瞬间。","艺术家的阴影——从痛苦中创造的我。","Indigo银河——我正在成为的广阔自我。"]},
+          {text:"一只紫色气球带着系在绳上的信息向你飘来。上面写着什么？",options:["'We Are Bulletproof'——我们克服一切的旗帜。","'致过去的我'——一封宽恕的信。","'你足够了'——治愈我仍携带的伤口。","'紫色，我爱你'——提醒我从不孤单。"]},
+          {text:"你站在火车站。出发牌闪烁。最后的选择。你去哪里？",options:["'We Are Bulletproof'——永恒反抗之路。","'花样年华/瞬间'——永恒青春之路。","'灵魂地图'——无尽自我发现之路。","'Yet To Come'——希望与传承之路。"]}
+        ]
+      },
+      'zh-TW':{
+        ui:{next:"下一步",restart:"重新遷徙",result:"揭曉靈魂",lang:"繁體中文",start:"開始你的旅程",again:"重新測試",analysis:"閱讀靈魂分析",back:"返回結果",healing:"治癒曲目",youtube:"在YouTube上觀看",cont:"故事繼續...",calc:"正在計算你的靈魂原型...",soundscape:"音景",tagline:"透過13道題目和8個時代的旅程，發現你的防彈少年團靈魂原型。",title:"Echoes of the Microcosmos",subtitle:"防彈少年團靈魂遷移測試",score:"你的靈魂原型",quotes:["人生中最美麗的瞬間是...","你從不孤單","生活仍在繼續","最好的尚未到來"]},
+        results:{
+          Rebel:{title:"不屈的先聲",desc:"你是守護最初夢想、對抗社會壓力的\u201C挑戰者\u201D。",track:"No More Dream"},
+          HYYH:{title:"脆弱的追夢人",desc:"你在\u201C最美與最痛\u201D的青春二元性中捕捉那轉瞬即逝的燦爛。",track:"春日 (Spring Day)"},
+          Wings:{title:"覺醒的靈魂",desc:"你是航行於誘惑與成熟之間深淵的\u201C哲學家\u201D。",track:"血汗淚 (Blood Sweat & Tears)"},
+          LY:{title:"真誠的治癒者",desc:"你已領悟\u201CEpiphany\u201D——愛自己是真愛的起點。",track:"Epiphany"},
+          MOTS:{title:"靈魂地圖繪製者",desc:"你整合人格面具與陰影，繪製自己的\u201C靈魂地圖\u201D。",track:"Black Swan"},
+          BE:{title:"溫暖的同行者",desc:"你在\u201CLife Goes On\u201D的日常韌性中找到慰藉。",track:"Life Goes On"},
+          Proof:{title:"永恆的見證者",desc:"你相信\u201C最好的尚未到來\u201D，珍惜你歷史的選集。",track:"Yet To Come"},
+          Solo:{title:"銀河探索者",desc:"你是一顆獨立的星，探索屬於自己的\u201CIndigo\u201D宇宙。",track:"野花 (Wild Flower)"}
+        },
+        questions:[
+          {text:"面對黑板上寫著的\u201C成功標準\u201D，你感到：",options:["反抗——我要重新定義自己的規則。","懷舊——這場掙扎也是我青春的一部分。","隱藏真實自我的壓力。","時光流逝感——這一切終將成為歷史。"]},
+          {text:"在童年的秘密基地裡，你發現了一個隱藏的盒子。裡面是：",options:["一本破舊的歌詞本——黑暗中寫下的歌。","一卷未沖洗的回憶膠卷。","裝滿未寄出信件的鐵盒。","一張去往陌生城市單程票。"]},
+          {text:"你站在浩瀚大海的邊緣，面前是一座木製腳手架。什麼在召喚你？",options:["躍入未知——隨波逐流。","張開雙臂向前飛躍——彷彿在飛翔。","留在腳手架上——讓海風治癒我。","接受潮汐的節奏——我無法控制大海。"]},
+          {text:"廢棄的教室裡，一架落滿灰塵的棕色鋼琴。你掀開琴蓋，看到樂譜。你彈奏什麼？",options:["雷鳴般充滿野心的和弦——不死的夢想。","溫柔憂鬱的旋律——初戀，初失。","治癒的搖籃曲——音樂是良藥。","複雜有質感的曲子——每個音符都是靈魂地圖上的色彩。"]},
+          {text:"你面前有七扇門，每扇門上都標著不同的路。你打開哪一扇？",options:["\u201C突破\u201D——我需要逃離才能找到自己。","\u201C在一起\u201D——牽手時我們更強大。","\u201C面對鏡子\u201D——我需要直面真實的自己。","\u201C告別\u201D——有些篇章需要結束。"]},
+          {text:"你手中拿著一副精美的面具。它精緻而近乎完美。這副面具對你意味著什麼？",options:["令人窒息——我想撕掉它呼吸。","它保存了我的美麗——但我厭倦了隱藏裂痕。","我頓悟了——面具不是真正的我。","面具是我的persona——我向世界展示的那部分自我。"]},
+          {text:"時間正在沙漏中流逝。你可以暫停它。你凍結哪個瞬間？",options:["暴風雨中——混亂中我感到活著。","草莓農場——簡單、甜蜜、溫暖。","練習室——汗水、鏡子、追求完美。","火車站——久別重逢。"]},
+          {text:"你的影子脫離身體，活生生地站在你面前。它開口說話。你怎麼辦？",options:["無視它——我沒有時間面對黑暗。","緊緊抱住它——我的影子也值得被愛。","擁抱它一起跳舞——光與影合為一體。","讓它獨立成長——影子也有自己的旅程。"]},
+          {text:"你走進一間沐浴在藍光中的房間。牆上覆蓋著回憶。你添加什麼？",options:["反叛塗鴉——宣告我 survived。","相冊——塑造了我的那些瞬間。","獨舞——動作是最真實的語言。","內心世界的地圖——記錄每一道傷痕和喜悅。"]},
+          {text:"你望向雨水流淌的窗外。對面你看到了什麼？",options:["空蕩蕩的街道上的雨——憂鬱之美。","大海和秘密基地——我曾經自由的地方。","一片Smeraldo花田——給我的秘密信息。","駛向未來的藍色巴士——我準備好上車了。"]},
+          {text:"你透過望遠鏡看到不同時間線上的自己。你聚焦於哪一個？",options:["過去的我——那個不知代價就做夢的我。","花樣年華的少年——年輕、害怕、卻充滿美好瞬間。","藝術家的陰影——從痛苦中創造的我。","Indigo銀河——我正在成為的廣闊自我。"]},
+          {text:"一隻紫色氣球帶著繫在繩上的信息向你飄來。上面寫著什麼？",options:["'We Are Bulletproof'——我們克服一切的旗幟。","'致過去的我'——一封寬恕的信。","'你足夠了'——治癒我仍攜帶的傷口。","'紫色，我愛你'——提醒我從不孤單。"]},
+          {text:"你站在火車站。出發牌閃爍。最後的選擇。你去哪裡？",options:["'We Are Bulletproof'——永恆反抗之路。","'花樣年華/瞬間'——永恆青春之路。","'靈魂地圖'——無盡自我發現之路。","'Yet To Come'——希望與傳承之路。"]}
+        ]
       }
-      if(particles.current.length>200)particles.current=particles.current.slice(-200);
+    };
+
+    // ===== ERA DEFINITIONS (8 Archetypes) =====
+    const ERA_IDS=['Rebel','HYYH','Wings','LY','MOTS','BE','Proof','Solo'];
+    const ERAS={
+      Rebel:{id:'Rebel',name:'Rebellious Noir',archetype:'The Defiant Rebel',colorPrimary:'#000000',colorSecondary:'#B22222',colorAccent:'#8B0000',keywords:['defiant','rebellious','fierce','independent','bulletproof'],analysisParagraphs:["Your soul resonates with the raw, unpolished energy of BTS's debut era. Like the boys who stood on that stage in 2013 with 'No More Dream,' you refuse to be boxed in by society's expectations. RM once said, 'Your dream is the map of your life,' and you've taken that literally — charting your own course even when the world told you to follow the beaten path.","The 'Rebellious Noir' archetype is marked by a fierce independence and an unshakeable belief in your own voice. You see through the illusions of the 'success criteria' that society tries to impose, much like the defiant stance in 'N.O' and 'We Are Bulletproof Pt.2.' Your strength lies in your ability to stand alone, to be the bulletproof shield for your own convictions.","Yet beneath that hardened exterior lies a vulnerability — the knowledge that rebellion is often born from pain. Suga once reflected, 'If you don't work hard, there won't be results,' and your journey has been one of relentless effort. Your challenge now is to channel that fire not just against what you oppose, but toward what you truly love."],healingTrack:{title:'We Are Bulletproof: The Eternal',artist:'BTS',spotifyUri:'spotify:track:6vG0S3tRqJwKpSrbR6Kj5t',youtubeUrl:'https://youtube.com/watch?v=7UWBYJQILQE'}},
+      HYYH:{id:'HYYH',name:'Ethereal Youth (HYYH)',archetype:'The Sensitive Idealist',colorPrimary:'#FF7F50',colorSecondary:'#FF6347',colorAccent:'#FFD700',keywords:['nostalgic','sensitive','dreamy','bittersweet','healing'],analysisParagraphs:["Your soul belongs to the 'Most Beautiful Moment in Life' — that fleeting, bittersweet chapter where youth is both a blessing and a curse. Like the narrative of 'I Need U' and 'Run,' you understand that the most beautiful moments are often the most painful. You feel things deeply, perhaps too deeply, and that sensitivity is both your greatest gift and your heaviest burden.","The 'Sensitive Idealist' archetype is defined by a longing for meaning in a world that often feels chaotic. You see beauty in the mundane — the way light hits a window, the sound of rain, the texture of an old photograph. V once said, 'It's okay to be sad. It's okay to not be okay,' and those words resonate with your core. You don't run from sadness; you sit with it, learn from it, and transform it into art.","Your journey mirrors the HYYH narrative — a search for identity in the liminal space between childhood and adulthood. Jimin's words echo here: 'I want to be a person who gives comfort to others.' You have a natural inclination to heal, to nurture, to hold space for others' pain. But remember: even the most beautiful moment in life requires you to be present for your own story too."],healingTrack:{title:'Spring Day',artist:'BTS',spotifyUri:'spotify:track:2j1fFjWHCI9KJSwcuYAOyF',youtubeUrl:'https://youtube.com/watch?v=xEeFrLSkMm8'}},
+      Wings:{id:'Wings',name:'Baroque Decadence (Wings)',archetype:'The Passionate Alchemist',colorPrimary:'#8B008B',colorSecondary:'#008080',colorAccent:'#FFD700',keywords:['passionate','transformative','alchemical','shadow-work','decadent'],analysisParagraphs:["Your soul carries the weight of 'Blood Sweat & Tears' — the understanding that great beauty requires great sacrifice. You are drawn to the Baroque, to the ornate, to the things that are both sacred and profane. Like the members who explored their individual shadows in the 'Wings' solos, you are not afraid to look into the abyss and find art there.","The 'Passionate Alchemist' archetype transforms pain into power. You understand that temptation is not something to be feared but to be understood. Jungkook's 'Begin' speaks to your journey — the realization that love can be both salvation and destruction. You've tasted both, and you've learned that the only way out is through.","Your path is one of integration — bringing together the light and shadow, the sacred and the sensual. As RM reflected during this era, 'Pain is a gift. Without it, we wouldn't know joy.' Your challenge is to embrace the full spectrum of your humanity, to let your wings carry you not above the world, but deeper into it."],healingTrack:{title:'Blood Sweat & Tears',artist:'BTS',spotifyUri:'spotify:track:2sF0c3zFBNVixYlwXFYjUS',youtubeUrl:'https://youtube.com/watch?v=hmE9f-TEutc'}},
+      LY:{id:'LY',name:'Chromatic Self-Love (Love Yourself)',archetype:'The Radiant Healer',colorPrimary:'#E6E6FA',colorSecondary:'#9370DB',colorAccent:'#FF69B4',keywords:['healing','self-love','radiant','gentle','acceptance'],analysisParagraphs:["Your soul has been shaped by the journey from 'Love Yourself: Her' to 'Answer' — a complete arc of falling, healing, and rising. You understand that self-love is not a destination but a practice, a daily choice to look in the mirror and say, 'You are enough.' Like the narrative of 'Euphoria' and 'Epiphany,' you've learned that the person you've been waiting for is yourself.","The 'Radiant Healer' archetype shines with a gentle, holographic light. You have the rare ability to see the beauty in others, often before they see it in themselves. Jin's 'Epiphany' captures your essence: 'I'm the one I should love in this world.' You've learned that healing radiates outward — that by loving yourself, you give others permission to do the same.","Your journey is one of integration — bringing together the fragmented pieces of your identity into a coherent, beautiful whole. As RM said during the LY era, 'There is no answer. The answer is within you.' You carry this wisdom like a lantern, illuminating the path for others while continuing to walk your own."],healingTrack:{title:'Epiphany',artist:'BTS (Jin)',spotifyUri:'spotify:track:6L88vHzQ2B2Mo3mhSx9W3z',youtubeUrl:'https://youtube.com/watch?v=fIkZOLsnoqY'}},
+      MOTS:{id:'MOTS',name:'Jungian Depth (Map of the Soul)',archetype:'The Philosophical Explorer',colorPrimary:'#2F4F4F',colorSecondary:'#4682B4',colorAccent:'#C0C0C0',keywords:['philosophical','introspective','shadow-work','authentic','depth'],analysisParagraphs:["Your soul is drawn to the depths — to the Jungian concepts that BTS so masterfully wove into their 'Map of the Soul' series. You understand that the persona is not a lie but a necessary interface with the world, and that the shadow is not an enemy but a teacher. 'Black Swan' speaks to your fear of losing your creative spark, and your determination to keep creating anyway.","The 'Philosophical Explorer' archetype is never satisfied with surface-level answers. You ask the hard questions: Who am I? What is my purpose? What am I afraid of? Like RM's intro 'Persona,' you grapple with the question, 'Who the hell am I?' — not as a crisis, but as a lifelong inquiry. Your strength is your intellectual curiosity and your willingness to sit with uncertainty.","Your journey is one of individuation — the process of becoming your true self. Suga's 'Shadow' captures your struggle: the fear of success, the weight of expectations, the desire to be both seen and hidden. But as the album teaches us, only by integrating our shadow can we become whole. Your path is not about perfection but about authenticity."],healingTrack:{title:'Black Swan',artist:'BTS',spotifyUri:'spotify:track:2cWBQ6TbM1Z5YKkrTzG6Hc',youtubeUrl:'https://youtube.com/watch?v=0lapF4DQPKQ'}},
+      BE:{id:'BE',name:'Healing Domesticity (BE)',archetype:'The Gentle Anchor',colorPrimary:'#708090',colorSecondary:'#F5F5F5',colorAccent:'#FFE4E1',keywords:['gentle','anchoring','healing','intimate','comforting'],analysisParagraphs:["Your soul carries the quiet wisdom of the 'BE' era — an album born from a time of global pause and personal reflection. You understand that healing doesn't always come in grand gestures but in the small, sacred rituals of daily life. 'Life Goes On' is your anthem: a gentle reminder that even when the world stops, we find ways to keep going, together.","The 'Gentle Anchor' archetype is the friend everyone turns to in times of need. Like Jin's 'Moon' or Jungkook's 'Still With You,' you have a stabilizing presence that makes others feel safe. You find beauty in domesticity — in shared meals, in quiet conversations, in the comfort of being truly seen by someone who loves you.","Your journey has taught you that vulnerability is not weakness but the foundation of true connection. As RM said during the BE era, 'It's okay to say that you're not okay.' You've learned to hold space for your own pain and for others', creating a sanctuary of acceptance. Your gift is your ability to make the people around you feel at home."],healingTrack:{title:'Life Goes On',artist:'BTS',spotifyUri:'spotify:track:0eu4C55hL6x29mmeAjytzC',youtubeUrl:'https://youtube.com/watch?v=-5q5m8be1Vk'}},
+      Proof:{id:'Proof',name:'Eternal Legacy (Proof)',archetype:'The Timeless Archivist',colorPrimary:'#1A1A40',colorSecondary:'#DDA0DD',colorAccent:'#FFD700',keywords:['timeless','legacy','reflective','hopeful','archival'],analysisParagraphs:["Your soul understands the weight of legacy. The 'Proof' anthology is not just a collection of songs but a testament to a journey — and you see your own life the same way. Every chapter, every struggle, every triumph is part of a larger narrative that you are still writing. 'Yet To Come' is your creed: the best moments are still ahead.","The 'Timeless Archivist' archetype honors the past while looking toward the future. You understand that where you come from shapes who you become, but it doesn't define where you're going. Like the members who looked back on their decade-long journey with gratitude and anticipation, you carry your history with grace, using it as a foundation rather than a cage.","Your journey is one of integration — bringing together all the versions of yourself into a coherent whole. As the members reflected in 'Proof,' the answer to 'Who am I?' is not a single moment but an entire lifetime of becoming. Your gift is your ability to see the through-line in your own story and to inspire others to find theirs."],healingTrack:{title:'Yet To Come',artist:'BTS',spotifyUri:'spotify:track:10SRYuwb23SmVFfYQqWjSH',youtubeUrl:'https://youtube.com/watch?v=9Hoq3X3Y6eE'}},
+      Solo:{id:'Solo',name:'Individual & Together (Chapter 2)',archetype:'The Cosmic Weaver',colorPrimary:'#191970',colorSecondary:'#DDA0DD',colorAccent:'#FFD700',keywords:['individual','cosmic','connected','expansive','authentic'],analysisParagraphs:["Your soul resonates with the energy of 'Chapter 2' — the era where each member explored their individual artistry while remaining connected to the whole. You understand that true freedom is not about going alone but about knowing you can stand on your own while still choosing to be part of something larger. Like the members' solo journeys, you've learned that individuality and togetherness are not opposites but complements.","The 'Cosmic Weaver' archetype moves between worlds with grace. You've explored your own path — like J-Hope's 'Jack In The Box,' RM's 'Indigo,' Agust D's 'D-DAY,' or Jungkook's 'GOLDEN' — and you've discovered that your individual voice only grows stronger when shared. You are both a star and part of a constellation, shining alone and together.","Your journey is one of expansion — not away from your roots but outward from them. As RM said of 'Indigo,' 'I wanted to show my 20s as honestly as possible.' You too are documenting your own chapter, knowing that the most authentic story is one that embraces both the individual notes and the harmony they create together."],healingTrack:{title:'Indigo (RM) / D-DAY (Agust D)',artist:'RM / Agust D',spotifyUri:'spotify:track:6iHCqnyfB3lG1jSJ7R3rQv',youtubeUrl:'https://youtube.com/watch?v=k3Wqj3j6vR0'}}
+    };
+
+    // ===== PHASES =====
+    const PHASES=[
+      {id:1,name:'Rebellion',questions:[1,2],gradientStart:'#000000',gradientEnd:'#B22222',texture:'film-grain'},
+      {id:2,name:'HYYH / Wings',questions:[3,4,5],gradientStart:'#FF7F50',gradientEnd:'#008080',texture:'film-grain'},
+      {id:3,name:'Love Yourself / MOTS',questions:[6,7,8],gradientStart:'#E6E6FA',gradientEnd:'#4682B4',texture:'smeraldo'},
+      {id:4,name:'BE / Healing',questions:[9,10],gradientStart:'#708090',gradientEnd:'#F5F5F5',texture:'smeraldo'},
+      {id:5,name:'Proof / Future',questions:[11,12,13],gradientStart:'#1A1A40',gradientEnd:'#DDA0DD',texture:'seven'}
+    ];
+    function getPhase(qId){return PHASES.find(p=>p.questions.includes(qId))||PHASES[0];}
+    function getTextureClass(qId){const t=getPhase(qId).texture;return t==='film-grain'?'grain-overlay':t==='smeraldo'?'bg-smeraldo-seven':'bg-smeraldo-seven';}
+
+    // ===== QUESTIONS (13 questions with weighted options) =====
+    const QUESTIONS=[
+      {id:1,chapter:"Rebellion",title:"The Standard",narrative:"You stand before a chalkboard covered in society's 'Success Criteria.' What do you do?",options:[
+        {id:"1A",text:"Smash the chalkboard — redefine success on my own terms.",weights:[{eraId:'Rebel',weight:3}]},
+        {id:"1B",text:"Capture the moment on film — this struggle is part of my youth.",weights:[{eraId:'HYYH',weight:3}]},
+        {id:"1C",text:"Erase the criteria and write: 'Love yourself.'",weights:[{eraId:'LY',weight:3}]},
+        {id:"1D",text:"Take a photo and keep it as proof of how far I've come.",weights:[{eraId:'Proof',weight:3}]}
+      ]},
+      {id:2,chapter:"Rebellion",title:"The Hideout Item",narrative:"You find a hidden box in your childhood hideout. Inside is one item that defined your youth. Which is it?",options:[
+        {id:"2A",text:"A worn lyrics book — pages filled with songs I wrote in the dark.",weights:[{eraId:'Rebel',weight:2},{eraId:'BE',weight:1}]},
+        {id:"2B",text:"A film roll of undeveloped memories — moments I was too afraid to face.",weights:[{eraId:'HYYH',weight:2},{eraId:'Wings',weight:1}]},
+        {id:"2C",text:"An iron box of letters — words I never had the courage to send.",weights:[{eraId:'LY',weight:2},{eraId:'BE',weight:1}]},
+        {id:"2D",text:"A one-way ticket to a city I've never been — the future waiting.",weights:[{eraId:'MOTS',weight:2},{eraId:'Solo',weight:1}]}
+      ]},
+      {id:3,chapter:"HYYH / Wings",title:"The Sea Scaffolding",narrative:"You stand at the edge of a vast sea, a wooden scaffolding stretching before you. The waves crash below. What calls to you?",options:[
+        {id:"3A",text:"Dive into the unknown — escape the shore, let the current take me.",weights:[{eraId:'Rebel',weight:1},{eraId:'Wings',weight:2}]},
+        {id:"3B",text:"Spread my arms and leap — not down, but forward, as if flying.",weights:[{eraId:'HYYH',weight:1},{eraId:'Wings',weight:2}]},
+        {id:"3C",text:"Stay on the scaffolding — let the sea air heal what's broken.",weights:[{eraId:'HYYH',weight:2},{eraId:'BE',weight:1}]},
+        {id:"3D",text:"Accept the tide's rhythm — I can't control the sea, only how I ride it.",weights:[{eraId:'Proof',weight:2},{eraId:'MOTS',weight:1}]}
+      ]},
+      {id:4,chapter:"HYYH / Wings",title:"The Brown Piano",narrative:"In an abandoned classroom, a brown upright piano sits covered in dust. You lift the lid and see sheet music. What do you play?",options:[
+        {id:"4A",text:"A thunderous, ambitious chord — the sound of a dream that refuses to die.",weights:[{eraId:'Rebel',weight:1},{eraId:'MOTS',weight:2}]},
+        {id:"4B",text:"A tender, melancholic melody — first love, first loss, first everything.",weights:[{eraId:'HYYH',weight:1},{eraId:'Wings',weight:2}]},
+        {id:"4C",text:"A gentle, healing lullaby — music as medicine for a wounded heart.",weights:[{eraId:'LY',weight:2},{eraId:'BE',weight:1}]},
+        {id:"4D",text:"A complex, textured piece — each note a different color on a map of the soul.",weights:[{eraId:'MOTS',weight:1},{eraId:'Solo',weight:2}]}
+      ]},
+      {id:5,chapter:"HYYH / Wings",title:"The Door",narrative:"You find seven doors, each labeled with a different path. Which one do you open?",options:[
+        {id:"5A",text:"The door marked 'Break Out' — I need to escape to find myself.",weights:[{eraId:'Rebel',weight:2},{eraId:'Wings',weight:1}]},
+        {id:"5B",text:"The door marked 'Stay Together' — we're stronger when we hold hands.",weights:[{eraId:'HYYH',weight:2},{eraId:'BE',weight:1}]},
+        {id:"5C",text:"The door marked 'Face the Mirror' — I need to confront who I really am.",weights:[{eraId:'LY',weight:2},{eraId:'MOTS',weight:1}]},
+        {id:"5D",text:"The door marked 'Say Farewell' — some chapters need to close.",weights:[{eraId:'Proof',weight:2},{eraId:'Solo',weight:1}]}
+      ]},
+      {id:6,chapter:"Love Yourself / MOTS",title:"The Mask",narrative:"You hold a beautiful mask in your hands. It's exquisite — almost perfect. What does it mean to you?",options:[
+        {id:"6A",text:"It's suffocating — I need to tear it off and breathe.",weights:[{eraId:'Rebel',weight:1},{eraId:'MOTS',weight:2}]},
+        {id:"6B",text:"It preserves my beauty — but I'm tired of hiding the cracks.",weights:[{eraId:'Wings',weight:2},{eraId:'LY',weight:1}]},
+        {id:"6C",text:"I've had an epiphany — the mask is not who I am.",weights:[{eraId:'LY',weight:3}]},
+        {id:"6D",text:"The mask is my persona — a necessary part of who I show the world.",weights:[{eraId:'MOTS',weight:3}]}
+      ]},
+      {id:7,chapter:"Love Yourself / MOTS",title:"The Hourglass",narrative:"Time is slipping through an hourglass. You have the power to pause it. Where do you freeze the moment?",options:[
+        {id:"7A",text:"In the middle of a storm — chaos is where I feel most alive.",weights:[{eraId:'Rebel',weight:1},{eraId:'Wings',weight:2}]},
+        {id:"7B",text:"At a strawberry farm — simple, sweet, and full of warmth.",weights:[{eraId:'BE',weight:3}]},
+        {id:"7C",text:"In a practice room — sweat, mirrors, and the pursuit of perfection.",weights:[{eraId:'MOTS',weight:2},{eraId:'Proof',weight:1}]},
+        {id:"7D",text:"At a train station — the moment of reunion after a long separation.",weights:[{eraId:'Proof',weight:2},{eraId:'Solo',weight:1}]}
+      ]},
+      {id:8,chapter:"Love Yourself / MOTS",title:"The Shadow",narrative:"Your shadow detaches from your feet and stands before you, alive. It speaks. What do you do?",options:[
+        {id:"8A",text:"Dismiss it — I don't have time for my own darkness.",weights:[{eraId:'Rebel',weight:1},{eraId:'MOTS',weight:2}]},
+        {id:"8B",text:"Hold it tight — even my shadow deserves love.",weights:[{eraId:'LY',weight:2},{eraId:'BE',weight:1}]},
+        {id:"8C",text:"Embrace it and dance — light and shadow moving as one.",weights:[{eraId:'Wings',weight:2},{eraId:'MOTS',weight:1}]},
+        {id:"8D",text:"Let it grow independently — my shadow has its own journey.",weights:[{eraId:'Solo',weight:3}]}
+      ]},
+      {id:9,chapter:"BE / Healing",title:"The Blue Room",narrative:"You enter a room bathed in blue light. The walls are covered in memories. What do you add to the room?",options:[
+        {id:"9A",text:"Rebel graffiti — a declaration that I survived this far.",weights:[{eraId:'Rebel',weight:2},{eraId:'Proof',weight:1}]},
+        {id:"9B",text:"A photo album — pages of moments that shaped who I am.",weights:[{eraId:'HYYH',weight:2},{eraId:'BE',weight:1}]},
+        {id:"9C",text:"A dance solo — movement as the truest language of the soul.",weights:[{eraId:'Wings',weight:1},{eraId:'Solo',weight:2}]},
+        {id:"9D",text:"A map of my inner world — every scar, every joy, every question mapped.",weights:[{eraId:'MOTS',weight:2},{eraId:'LY',weight:1}]}
+      ]},
+      {id:10,chapter:"BE / Healing",title:"The Window",narrative:"You look out a rain-streaked window. What do you see on the other side?",options:[
+        {id:"10A",text:"Rain falling on empty streets — the beauty of melancholy.",weights:[{eraId:'HYYH',weight:2},{eraId:'BE',weight:1}]},
+        {id:"10B",text:"The sea and the hideout — a place where I was truly free.",weights:[{eraId:'HYYH',weight:1},{eraId:'BE',weight:2}]},
+        {id:"10C",text:"A field of Smeraldo flowers — a secret message meant for me.",weights:[{eraId:'LY',weight:2},{eraId:'Proof',weight:1}]},
+        {id:"10D",text:"A blue bus heading to the future — and I'm ready to board.",weights:[{eraId:'Solo',weight:3}]}
+      ]},
+      {id:11,chapter:"Proof / Future",title:"The Telescope",narrative:"You look through a telescope and see not the stars, but versions of yourself across time. Which one do you focus on?",options:[
+        {id:"11A",text:"My past self — the one who dreamed before knowing the cost.",weights:[{eraId:'HYYH',weight:1},{eraId:'Proof',weight:2}]},
+        {id:"11B",text:"The HYYH boy — young, scared, but full of beautiful moments.",weights:[{eraId:'HYYH',weight:2},{eraId:'BE',weight:1}]},
+        {id:"11C",text:"The artist shadow — the version of me that creates from pain.",weights:[{eraId:'Wings',weight:1},{eraId:'MOTS',weight:2}]},
+        {id:"11D",text:"The indigo galaxy — the vast, expansive self I'm becoming.",weights:[{eraId:'Solo',weight:3}]}
+      ]},
+      {id:12,chapter:"Proof / Future",title:"The Purple Balloon",narrative:"A purple balloon floats toward you, carrying a message tied to its string. What does the message say?",options:[
+        {id:"12A",text:"'We Are Bulletproof' — a battle flag for everything we've overcome.",weights:[{eraId:'Rebel',weight:2},{eraId:'Proof',weight:1}]},
+        {id:"12B",text:"'Dear past me' — a letter of forgiveness to who I used to be.",weights:[{eraId:'LY',weight:2},{eraId:'BE',weight:1}]},
+        {id:"12C",text:"'You are enough' — a healing symbol for the wounds I still carry.",weights:[{eraId:'LY',weight:1},{eraId:'BE',weight:2}]},
+        {id:"12D",text:"'Purple, I love you' — a home signal, a reminder I'm never alone.",weights:[{eraId:'Solo',weight:2},{eraId:'Proof',weight:1}]}
+      ]},
+      {id:13,chapter:"Proof / Future",title:"The Station Screen",narrative:"You stand at a train station. The departure board flickers with four destinations. Your final choice determines everything. Where do you go?",options:[
+        {id:"13A",text:"'We Are Bulletproof' — the path of eternal defiance and resilience.",weights:[{eraId:'Rebel',weight:4}]},
+        {id:"13B",text:"'HYYH / Moment' — the path of eternal youth and beautiful memories.",weights:[{eraId:'HYYH',weight:4}]},
+        {id:"13C",text:"'Soul Map' — the path of endless self-discovery and depth.",weights:[{eraId:'MOTS',weight:4}]},
+        {id:"13D",text:"'Yet To Come' — the path of hope, legacy, and what lies ahead.",weights:[{eraId:'Proof',weight:4}]}
+      ]}
+    ];
+
+    // ===== TRANSLATION HELPER =====
+    function tr(lang,path){
+      const parts=path.split('.');
+      let obj=TRANSLATIONS[lang];
+      for(const p of parts){
+        if(obj&&obj[p]!==undefined)obj=obj[p];
+        else if(obj&&Array.isArray(obj)&&!isNaN(parseInt(p)))obj=obj[parseInt(p)];
+        else{obj=undefined;break;}
+      }
+      if(obj!==undefined&&obj!==null)return obj;
+      obj=TRANSLATIONS.en;
+      for(const p of parts){
+        if(obj&&obj[p]!==undefined)obj=obj[p];
+        else if(obj&&Array.isArray(obj)&&!isNaN(parseInt(p)))obj=obj[parseInt(p)];
+        else return path;
+      }
+      return obj;
     }
-    if(trigger&&mouseX>=0&&mouseY>=0)burst(mouseX,mouseY);
-    let anim;
-    function draw(){
-      ctx.clearRect(0,0,c.width,c.height);
-      particles.current=particles.current.map(p=>{
-        const vx=Math.cos(p.angle)*p.velocity;
-        const vy=Math.sin(p.angle)*p.velocity;
-        const np={...p,x:p.x+vx,y:p.y+vy+0.3,velocity:p.velocity*0.97,rotation:p.rotation+(p.type==='ribbon'?5:2),size:p.size*0.98};
-        ctx.save();
-        ctx.translate(np.x,np.y);
-        ctx.rotate(np.rotation*Math.PI/180);
-        ctx.globalAlpha=Math.max(0,np.velocity/6);
-        if(np.type==='ribbon'){
-          ctx.strokeStyle=np.color; ctx.lineWidth=2;
-          ctx.beginPath(); ctx.moveTo(-np.size/2,0); ctx.quadraticCurveTo(0,-np.size,np.size/2,0); ctx.stroke();
-        } else {
-          const g=ctx.createRadialGradient(0,0,0,0,0,np.size);
-          g.addColorStop(0,np.color); g.addColorStop(1,'transparent');
-          ctx.fillStyle=g; ctx.beginPath(); ctx.arc(0,0,np.size,0,Math.PI*2); ctx.fill();
+
+    // ===== SCORING ALGORITHM =====
+    function calculateResult(answers,lastOptionId){
+      const scores={};
+      ERA_IDS.forEach(id=>scores[id]=0);
+      answers.forEach((opt,i)=>{
+        const q=QUESTIONS.find(q=>q.id===i+1);
+        if(!q)return;
+        const option=q.options.find(o=>o.id===opt);
+        if(!option)return;
+        option.weights.forEach(w=>{scores[w.eraId]=(scores[w.eraId]||0)+w.weight;});
+      });
+      let maxScore=0;
+      let winningEra=ERA_IDS[0];
+      ERA_IDS.forEach(id=>{
+        const s=scores[id]||0;
+        if(s>maxScore){maxScore=s;winningEra=id;}
+      });
+      const tiedEras=ERA_IDS.filter(id=>(scores[id]||0)===maxScore);
+      if(tiedEras.length>1&&lastOptionId){
+        const lastQ=QUESTIONS[QUESTIONS.length-1];
+        const lastOpt=lastQ.options.find(o=>o.id===lastOptionId);
+        if(lastOpt){
+          for(const w of lastOpt.weights){
+            if(tiedEras.includes(w.eraId))return w.eraId;
+          }
         }
-        ctx.restore();
-        return np;
-      }).filter(p=>p.velocity>0.3&&p.size>0.5);
-      anim=requestAnimationFrame(draw);
+      }
+      return winningEra;
     }
-    draw();
-    return ()=>{window.removeEventListener('resize',resize);cancelAnimationFrame(anim)};
-  },[trigger,mouseX,mouseY,phaseColor]);
-  return React.createElement('canvas',{ref,id:'particle-canvas'});
-}
 
-// ===== INTRO SCREEN =====
-function IntroScreen({onStart}){
-  return React.createElement('div',{className:'relative min-h-screen w-full flex flex-col items-center justify-center px-4 sm:px-8',style:{background:'linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 30%,#2d1b69 60%,#1a1a2e 80%,#0a0a0a 100%)'}},
-    React.createElement('div',{className:'fixed inset-0 pointer-events-none overflow-hidden'},
-      React.createElement(motion.div,{className:'absolute top-1/4 left-1/4 w-64 h-64 rounded-full',style:{background:'radial-gradient(circle,rgba(139,92,246,0.15) 0%,transparent 70%)'},animate:{x:[0,30,-20,0],y:[0,-40,20,0]},transition:{duration:12,repeat:Infinity,ease:'easeInOut'}}),
-      React.createElement(motion.div,{className:'absolute bottom-1/3 right-1/4 w-96 h-96 rounded-full',style:{background:'radial-gradient(circle,rgba(221,160,221,0.1) 0%,transparent 70%)'},animate:{x:[0,-40,30,0],y:[0,30,-50,0]},transition:{duration:15,repeat:Infinity,ease:'easeInOut'}})
-    ),
-    React.createElement('div',{className:'relative z-10 text-center max-w-3xl mx-auto'},
-      React.createElement(motion.div,{initial:{opacity:0,y:30},animate:{opacity:1,y:0},transition:{duration:1,ease:[0.22,1,0.36,1]}},
-        React.createElement('div',{className:'mb-6'},
-          React.createElement(motion.h1,{className:'text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-3 tracking-tight',initial:{opacity:0,scale:0.9},animate:{opacity:1,scale:1},transition:{delay:0.2,duration:0.8}},
-            'Echoes of the',React.createElement('br'),
-            React.createElement('span',{className:'bg-gradient-to-r from-purple-400 via-pink-300 to-purple-200 bg-clip-text text-transparent'},'Microcosmos')
-          )
+    // ===== PARTICLE CANVAS =====
+    function ParticleCanvas({isActive,mouseX,mouseY,phaseColor}){
+      const canvasRef=useRef(null);
+      const particlesRef=useRef([]);
+      const animRef=useRef(0);
+      const idRef=useRef(0);
+      const RIBBON_COLORS=['#8B5CF6','#DDA0DD','#FF69B4','#E6E6FA','#FFD700','#9370DB'];
+      const createParticles=useCallback((x,y)=>{
+        const count=12;
+        const newP=[];
+        for(let i=0;i<count;i++){
+          const angle=(Math.PI*2*i)/count+Math.random()*0.5;
+          const vel=2+Math.random()*4;
+          const type=Math.random()>0.5?'ribbon':'ember';
+          newP.push({id:idRef.current++,x,y,color:type==='ribbon'?RIBBON_COLORS[Math.floor(Math.random()*RIBBON_COLORS.length)]:phaseColor,size:type==='ribbon'?4+Math.random()*6:2+Math.random()*3,angle,velocity:vel,rotation:Math.random()*360,type});
+        }
+        particlesRef.current=[...particlesRef.current,...newP];
+        if(particlesRef.current.length>200)particlesRef.current=particlesRef.current.slice(-200);
+      },[phaseColor]);
+      useEffect(()=>{if(isActive&&mouseX>=0&&mouseY>=0)createParticles(mouseX,mouseY);},[isActive,mouseX,mouseY,createParticles]);
+      useEffect(()=>{
+        const canvas=canvasRef.current;
+        if(!canvas)return;
+        const ctx=canvas.getContext('2d');
+        if(!ctx)return;
+        const resize=()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;};
+        resize();
+        window.addEventListener('resize',resize);
+        const animate=()=>{
+          ctx.clearRect(0,0,canvas.width,canvas.height);
+          particlesRef.current=particlesRef.current.map(p=>{
+            const vx=Math.cos(p.angle)*p.velocity;
+            const vy=Math.sin(p.angle)*p.velocity;
+            const u={...p,x:p.x+vx,y:p.y+vy+0.3,velocity:p.velocity*0.97,rotation:p.rotation+(p.type==='ribbon'?5:2),size:p.size*0.98};
+            ctx.save();
+            ctx.translate(u.x,u.y);
+            ctx.rotate(u.rotation*Math.PI/180);
+            ctx.globalAlpha=Math.max(0,u.velocity/6);
+            if(u.type==='ribbon'){
+              ctx.strokeStyle=u.color;ctx.lineWidth=2;
+              ctx.beginPath();ctx.moveTo(-u.size/2,0);ctx.quadraticCurveTo(0,-u.size,u.size/2,0);ctx.stroke();
+            }else{
+              const g=ctx.createRadialGradient(0,0,0,0,0,u.size);
+              g.addColorStop(0,u.color);g.addColorStop(1,'transparent');
+              ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,u.size,0,Math.PI*2);ctx.fill();
+            }
+            ctx.restore();
+            return u;
+          }).filter(p=>p.velocity>0.3&&p.size>0.5);
+          animRef.current=requestAnimationFrame(animate);
+        };
+        animate();
+        return()=>{window.removeEventListener('resize',resize);cancelAnimationFrame(animRef.current);};
+      },[]);
+      return h('canvas',{ref:canvasRef,id:'particle-canvas','aria-hidden':'true'});
+    }
+
+    // ===== INTRO SCREEN =====
+    function IntroScreen({onStart,tr:trFn,lang}){
+      const [quoteIdx,setQuoteIdx]=useState(0);
+      const quotes=trFn(lang,'ui.quotes')||["The most beautiful moment in life is...","You never walk alone","Life goes on","The best is yet to come"];
+      useEffect(()=>{
+        const t=setInterval(()=>setQuoteIdx(i=>(i+1)%quotes.length),4000);
+        return()=>clearInterval(t);
+      },[quotes.length]);
+      return h('div',{className:'relative min-h-screen w-full flex flex-col items-center justify-center px-4 sm:px-8'},
+        h('div',{className:'fixed inset-0',style:{background:'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 30%, #2d1b69 60%, #1a1a2e 80%, #0a0a0a 100%)'}}),
+        h('div',{className:'fixed inset-0 pointer-events-none overflow-hidden'},
+          h(m.div,{className:'absolute top-1/4 left-1/4 w-64 h-64 rounded-full',style:{background:'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)'},animate:{x:[0,30,-20,0],y:[0,-40,20,0]},transition:{duration:12,repeat:Infinity,ease:'easeInOut'}}),
+          h(m.div,{className:'absolute bottom-1/3 right-1/4 w-96 h-96 rounded-full',style:{background:'radial-gradient(circle, rgba(221,160,221,0.1) 0%, transparent 70%)'},animate:{x:[0,-40,30,0],y:[0,30,-50,0]},transition:{duration:15,repeat:Infinity,ease:'easeInOut'}})
         ),
-        React.createElement(motion.p,{className:'text-white/50 text-base sm:text-lg md:text-xl font-light mb-4 max-w-xl mx-auto leading-relaxed',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.4,duration:0.6}},'A cinematic soul-migration test through 10 years of BTS'),
-        React.createElement(motion.div,{className:'flex flex-wrap justify-center gap-2 mb-10',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.6,duration:0.6}},
-          ['Rebellious Noir','HYYH','Wings','Love Yourself','MOTS','BE','Proof','Chapter 2'].map((e,i)=>React.createElement('span',{key:e,className:'px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/40 text-xs font-light'},e))
-        ),
-        React.createElement(motion.p,{className:'text-white/60 text-sm sm:text-base font-light max-w-lg mx-auto mb-10 leading-relaxed',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.8,duration:0.6}},'Answer 13 questions drawn from Weverse interviews and BU lore. Each choice maps to one of eight eras — your soul will find its echo.'),
-        React.createElement(motion.button,{onClick:onStart,className:'px-10 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-medium text-lg hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:1.0,duration:0.6},whileHover:{scale:1.02},whileTap:{scale:0.98}},
-          React.createElement('span',{className:'flex items-center gap-3'},'Begin the Journey',React.createElement(motion.span,{className:'inline-block',animate:{x:[0,5,0]},transition:{duration:1.5,repeat:Infinity,ease:'easeInOut'}},'→'))
-        ),
-        React.createElement(motion.p,{className:'text-white/30 text-xs mt-16 font-light',initial:{opacity:0},animate:{opacity:1},transition:{delay:1.2,duration:0.6}},'For ARMY · 2013 — 2024')
-      )
-    )
-  );
-}
-
-// ===== QUIZ COMPONENT =====
-function Quiz({onComplete}){
-  const [qIdx,setQIdx]=useState(0);
-  const [scores,setScores]=useState({});
-  const [selected,setSelected]=useState(null);
-  const [transition,setTransition]=useState(false);
-  const [mousePos,setMousePos]=useState({x:-1,y:-1});
-  const [particleTrig,setParticleTrig]=useState(0);
-  const question=QUESTIONS[qIdx];
-  const phase=getPhase(question.id);
-  const progress=((qIdx+1)/QUESTIONS.length)*100;
-
-  function calcResult(finalScores,lastOptId){
-    let max=0,winner=ERAS[0].id;
-    for(const e of ERAS){const s=finalScores[e.id]||0;if(s>max){max=s;winner=e.id}}
-    const lastQ=QUESTIONS[QUESTIONS.length-1];
-    const lastWeights=lastQ.options.find(o=>o.id===lastOptId)?.weights.map(w=>w.eraId)||[];
-    const tied=ERAS.filter(e=>(finalScores[e.id]||0)===max);
-    if(tied.length>1){for(const eid of lastWeights){if(tied.some(e=>e.id===eid))return eid}}
-    return winner;
-  }
-
-  function handleSelect(opt){
-    if(selected)return;
-    setSelected(opt.id);
-    const ns={...scores};
-    opt.weights.forEach(w=>{ns[w.eraId]=(ns[w.eraId]||0)+w.weight});
-    setScores(ns);
-    setParticleTrig(t=>t+1);
-    setTimeout(()=>{
-      setTransition(true);
-      setTimeout(()=>{
-        if(qIdx<QUESTIONS.length-1){setQIdx(i=>i+1);setSelected(null);setTransition(false)}
-        else onComplete(calcResult(ns,opt.id));
-      },800);
-    },600);
-  }
-
-  const bgStyle={background:`linear-gradient(135deg, ${phase.gradientStart}, ${phase.gradientEnd})`};
-
-  return React.createElement('div',{className:'relative min-h-screen w-full overflow-hidden transition-all duration-1000',style:bgStyle,onMouseMove:e=>setMousePos({x:e.clientX,y:e.clientY})},
-    React.createElement('div',{className:'grain-overlay'}),
-    React.createElement(ParticleCanvas,{trigger:particleTrig,mouseX:mousePos.x,mouseY:mousePos.y,phaseColor:phase.gradientEnd}),
-    React.createElement('div',{className:'fixed top-0 left-0 right-0 z-40 h-1'},
-      React.createElement(motion.div,{className:'h-full bg-white/30 backdrop-blur-sm',initial:{width:0},animate:{width:progress+'%'},transition:{duration:0.5,ease:'easeOut'}})
-    ),
-    React.createElement('div',{className:'fixed top-4 left-4 z-40'},
-      React.createElement(motion.div,{key:phase.id,className:'px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/80 text-xs font-light tracking-widest uppercase',initial:{opacity:0,y:-10},animate:{opacity:1,y:0}},`Chapter ${phase.id}: ${phase.name}`)
-    ),
-    React.createElement('div',{className:'fixed top-4 right-4 z-40'},
-      React.createElement(motion.div,{className:'text-white/60 text-sm font-mono',initial:{opacity:0},animate:{opacity:1}},`${String(qIdx+1).padStart(2,'0')}/${String(QUESTIONS.length).padStart(2,'0')}`)
-    ),
-    React.createElement('div',{className:'relative z-30 flex flex-col items-center justify-center min-h-screen px-4 sm:px-8 py-20'},
-      React.createElement(AnimatePresence,{mode:'wait'},
-        !transition?
-        React.createElement(motion.div,{key:question.id,className:'w-full max-w-3xl mx-auto',initial:{opacity:0,y:30,filter:'blur(10px)'},animate:{opacity:1,y:0,filter:'blur(0px)'},exit:{opacity:0,y:-30,filter:'blur(10px)'},transition:{duration:0.6,ease:[0.22,1,0.36,1]}},
-          React.createElement(motion.h2,{className:'text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 tracking-tight',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.1,duration:0.5}},question.title),
-          React.createElement(motion.p,{className:'text-white/70 text-base sm:text-lg mb-10 leading-relaxed font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.2,duration:0.5}},question.narrative),
-          React.createElement('div',{className:'space-y-3'},question.options.map((opt,i)=>
-            React.createElement(motion.button,{key:opt.id,onClick:()=>handleSelect(opt),disabled:selected!==null,className:`w-full text-left p-4 sm:p-5 rounded-xl border transition-all duration-300 ${selected===opt.id?'bg-white/20 border-white/50 text-white shadow-lg shadow-white/10':selected!==null?'bg-white/5 border-white/10 text-white/40':'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:border-white/30 hover:shadow-lg hover:shadow-white/5'}`,initial:{opacity:0,x:-20},animate:{opacity:1,x:0},transition:{delay:0.3+i*0.08,duration:0.4},whileHover:selected===null?{scale:1.01}:{},whileTap:selected===null?{scale:0.99}:{}},
-              React.createElement('div',{className:'flex items-start gap-3 sm:gap-4'},
-                React.createElement('span',{className:`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${selected===opt.id?'bg-white/30 text-white':'bg-white/10 text-white/60'}`},String.fromCharCode(65+i)),
-                React.createElement('span',{className:'text-sm sm:text-base leading-relaxed pt-1'},opt.text)
+        h('div',{className:'relative z-10 text-center max-w-3xl mx-auto'},
+          h(m.div,{initial:{opacity:0,y:30},animate:{opacity:1,y:0},transition:{duration:1,ease:[0.22,1,0.36,1]}},
+            h(m.div,{className:'mb-6',initial:{opacity:0,scale:0.9},animate:{opacity:1,scale:1},transition:{delay:0.2,duration:0.8}},
+              h('h1',{className:'text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-3 tracking-tight',style:{fontFamily:'Playfair Display, Georgia, serif'}},
+                trFn(lang,'ui.title')||'Echoes of the Microcosmos',
+                h('br'),
+                h('span',{className:'bg-gradient-to-r from-purple-400 via-pink-300 to-purple-200 bg-clip-text text-transparent'},trFn(lang,'ui.subtitle')||'A BTS Soul-Migration Test')
               )
-            )
-          ))
-        ):
-        React.createElement(motion.div,{className:'flex flex-col items-center justify-center',initial:{opacity:0,scale:0.8,filter:'blur(20px)'},animate:{opacity:1,scale:1,filter:'blur(0px)'},exit:{opacity:0,scale:1.2,filter:'blur(20px)'},transition:{duration:0.6,ease:[0.22,1,0.36,1]}},
-          React.createElement(motion.div,{className:'text-white/30 text-6xl mb-4',animate:{y:[0,-10,0],rotate:[0,5,-5,0]},transition:{duration:0.8,repeat:Infinity,ease:'easeInOut'}},'✦'),
-          React.createElement('p',{className:'text-white/50 text-lg font-light tracking-wider'},qIdx<QUESTIONS.length-1?'The story continues...':'Calculating your soul archetype...')
-        )
-      )
-    ),
-    React.createElement('div',{className:'fixed bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none opacity-20',style:{background:`radial-gradient(ellipse at center, ${phase.gradientEnd} 0%, transparent 70%)`}})
-  );
-}
-
-// ===== RESULT COMPONENT =====
-function Result({winningEraId,onRestart}){
-  const [showAnalysis,setShowAnalysis]=useState(false);
-  const era=ERAS.find(e=>e.id===winningEraId)||ERAS[0];
-
-  return React.createElement('div',{className:'relative min-h-screen w-full overflow-hidden',style:{background:`linear-gradient(135deg, ${era.colorPrimary}, ${era.colorSecondary})`}},
-    React.createElement('div',{className:'grain-overlay'}),
-    React.createElement('div',{className:'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vmin] h-[80vmin] pointer-events-none animate-soul-pulse',style:{background:`radial-gradient(circle at center, ${era.colorSecondary}88 0%, ${era.colorPrimary}44 40%, transparent 70%)`,filter:'blur(60px)'}}),
-    React.createElement('div',{className:'fixed inset-0 pointer-events-none overflow-hidden'},
-      Array.from({length:20}).map((_,i)=>React.createElement(motion.div,{key:i,className:'absolute w-1 h-1 rounded-full',style:{background:era.colorAccent,left:Math.random()*100+'%',top:Math.random()*100+'%'},animate:{y:[0,-30,0],opacity:[0,0.6,0],scale:[0,1,0]},transition:{duration:3+Math.random()*4,repeat:Infinity,delay:Math.random()*5,ease:'easeInOut'}}))
-    ),
-    React.createElement('div',{className:'relative z-10 flex flex-col items-center justify-center min-h-screen px-4 sm:px-8 py-20'},
-      React.createElement(AnimatePresence,{mode:'wait'},
-        !showAnalysis?
-        React.createElement(motion.div,{key:'result',className:'w-full max-w-3xl mx-auto text-center',initial:{opacity:0,scale:0.8,filter:'blur(20px)'},animate:{opacity:1,scale:1,filter:'blur(0px)'},transition:{duration:1,ease:[0.22,1,0.36,1]}},
-          React.createElement(motion.div,{className:'inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/70 text-xs font-light tracking-[0.2em] uppercase mb-8',initial:{opacity:0,y:-10},animate:{opacity:1,y:0},transition:{delay:0.3,duration:0.5}},'Your Soul Era'),
-          React.createElement(motion.h1,{className:'text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.5,duration:0.6}},era.archetype),
-          React.createElement(motion.h2,{className:'text-xl sm:text-2xl text-white/60 mb-8 font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.7,duration:0.6}},era.name),
-          React.createElement(motion.p,{className:'text-white/80 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-10 font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.9,duration:0.6}},era.description),
-          React.createElement(motion.div,{className:'flex flex-wrap justify-center gap-2 mb-12',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:1.1,duration:0.6}},
-            era.keywords.map((kw,i)=>React.createElement('span',{key:kw,className:'px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/60 text-xs font-light'},'#'+kw))
-          ),
-          React.createElement(motion.div,{className:'flex flex-col sm:flex-row gap-4 justify-center',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:1.3,duration:0.6}},
-            React.createElement('button',{onClick:()=>setShowAnalysis(true),className:'px-8 py-3 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white font-medium hover:bg-white/30 transition-all duration-300 hover:shadow-lg hover:shadow-white/10'},'Read Soul Analysis'),
-            React.createElement('button',{onClick:onRestart,className:'px-8 py-3 rounded-xl bg-transparent border border-white/20 text-white/70 font-light hover:bg-white/10 hover:text-white transition-all duration-300'},'Take the Test Again')
-          )
-        ):
-        React.createElement(motion.div,{key:'analysis',className:'w-full max-w-3xl mx-auto',initial:{opacity:0,y:30,filter:'blur(10px)'},animate:{opacity:1,y:0,filter:'blur(0px)'},transition:{duration:0.8,ease:[0.22,1,0.36,1]}},
-          React.createElement('button',{onClick:()=>setShowAnalysis(false),className:'mb-8 text-white/50 hover:text-white/80 transition-colors duration-300 flex items-center gap-2 text-sm'},React.createElement('span',null,'←'),React.createElement('span',null,'Back to result')),
-          React.createElement(motion.h2,{className:'text-2xl sm:text-3xl font-bold text-white mb-2',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.1,duration:0.5}},'Soul Analysis'),
-          React.createElement(motion.p,{className:'text-white/50 text-sm mb-10 font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.15,duration:0.5}},`${era.archetype} · ${era.name}`),
-          React.createElement('div',{className:'space-y-6 mb-10'},era.analysisParagraphs.map((p,i)=>React.createElement(motion.p,{key:i,className:'text-white/80 text-base leading-relaxed font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.2+i*0.15,duration:0.5}},p))),
-          React.createElement(motion.div,{className:'p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.6,duration:0.5}},
-            React.createElement('h3',{className:'text-white/60 text-xs font-light tracking-[0.2em] uppercase mb-3'},'Healing Track'),
-            React.createElement('p',{className:'text-white text-lg font-medium mb-1'},era.healingTrack.title),
-            React.createElement('p',{className:'text-white/50 text-sm mb-4'},era.healingTrack.artist),
-            React.createElement('div',{className:'flex gap-3'},
-              React.createElement('a',{href:era.healingTrack.youtubeUrl,target:'_blank',rel:'noopener noreferrer',className:'px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 text-white text-sm transition-all duration-300'},'▶ Watch on YouTube')
-            )
-          ),
-          React.createElement(motion.div,{className:'mt-10 text-center',initial:{opacity:0},animate:{opacity:1},transition:{delay:0.8,duration:0.5}},
-            React.createElement('button',{onClick:onRestart,className:'px-8 py-3 rounded-xl bg-white/10 border border-white/20 text-white/70 font-light hover:bg-white/20 hover:text-white transition-all duration-300'},'Take the Test Again')
+            ),
+            h(m.p,{className:'text-white/50 text-base sm:text-lg md:text-xl font-light mb-4 max-w-xl mx-auto leading-relaxed',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.4,duration:0.6}},trFn(lang,'ui.tagline')),
+            h(m.div,{key:'quote-'+quoteIdx,className:'typewriter text-white/40 text-sm sm:text-base italic font-light mb-6 max-w-md mx-auto',style:{fontFamily:'Playfair Display, Georgia, serif'},initial:{opacity:0},animate:{opacity:1},transition:{delay:0.5,duration:0.4}},quotes[quoteIdx]),
+            h(m.div,{className:'flex flex-wrap justify-center gap-2 mb-10',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.6,duration:0.6}},
+              ERA_IDS.map((eid,i)=>h('span',{key:eid,className:'px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/40 text-xs font-light'},trFn(lang,'results.'+eid+'.title')||ERAS[eid].archetype))
+            ),
+            h(m.p,{className:'text-white/60 text-sm sm:text-base font-light max-w-lg mx-auto mb-10 leading-relaxed',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.8,duration:0.6}},trFn(lang,'ui.tagline')||'Discover your BTS soul archetype.'),
+            h(m.button,{onClick:onStart,className:'px-10 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-medium text-lg hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 group',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:1.0,duration:0.6},whileHover:{scale:1.02},whileTap:{scale:0.98}},
+              h('span',{className:'flex items-center gap-3'},
+                trFn(lang,'ui.start')||'Begin Your Journey',
+                h(m.span,{className:'inline-block',animate:{x:[0,5,0]},transition:{duration:1.5,repeat:Infinity,ease:'easeInOut'}},'→')
+              )
+            ),
+            h(m.p,{className:'text-white/30 text-xs mt-16 font-light',initial:{opacity:0},animate:{opacity:1},transition:{delay:1.2,duration:0.6}},'For ARMY · 2013 — 2024')
           )
         )
-      )
-    )
-  );
-}
+      );
+    }
 
-// ===== APP =====
-function App(){
-  const [screen,setScreen]=useState('intro');
-  const [winningEra,setWinningEra]=useState('');
-  return React.createElement('main',{className:'relative min-h-screen w-full overflow-hidden bg-black'},
-    React.createElement(AnimatePresence,{mode:'wait'},
-      screen==='intro'?React.createElement(IntroScreen,{key:'intro',onStart:()=>setScreen('quiz')}):
-      screen==='quiz'?React.createElement(Quiz,{key:'quiz',onComplete:(eid)=>{setWinningEra(eid);setScreen('result')}}):
-      React.createElement(Result,{key:'result',winningEraId:winningEra,onRestart:()=>{setWinningEra('');setScreen('intro')}})
-    )
-  );
-}
+    // ===== SOUNDSCAPE =====
+    function Soundscape({active,onToggle}){
+      const ctxRef=useRef(null);
+      const oscRef=useRef(null);
+      const gainRef=useRef(null);
+      useEffect(()=>{
+        if(active&&!ctxRef.current){
+          try{
+            const ac=new(window.AudioContext||window.webkitAudioContext)();
+            const g=ac.createGain();
+            g.gain.value=0.08;
+            g.connect(ac.destination);
+            const o=ac.createOscillator();
+            o.type='sine';
+            o.frequency.value=60;
+            const lfo=ac.createOscillator();
+            lfo.type='sine';
+            lfo.frequency.value=0.5;
+            const lfoG=ac.createGain();
+            lfoG.gain.value=20;
+            lfo.connect(lfoG);lfoG.connect(o.frequency);
+            o.connect(g);
+            o.start();lfo.start();
+            ctxRef.current=ac;oscRef.current=o;gainRef.current=g;
+          }catch(e){console.log('Audio not available');}
+        }else if(!active&&ctxRef.current){
+          try{ctxRef.current.close();}catch(e){}
+          ctxRef.current=null;oscRef.current=null;gainRef.current=null;
+        }
+        return()=>{
+          if(ctxRef.current){try{ctxRef.current.close();}catch(e){}ctxRef.current=null;}
+        };
+      },[active]);
+      return h('button',{onClick:onToggle,className:'soundscape-btn'+(active?' active':''),title:'Soundscape'},active?'♪':'♪');
+    }
 
-ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
-</script>
+    // ===== QUIZ =====
+    function Quiz({onComplete,tr:trFn,lang}){
+      const [currentQ,setCurrentQ]=useState(0);
+      const [scores,setScores]=useState({});
+      const [selected,setSelected]=useState(null);
+      const [showTrans,setShowTrans]=useState(false);
+      const [mousePos,setMousePos]=useState({x:-1,y:-1});
+      const [particleTrig,setParticleTrig]=useState(0);
+      const [answers,setAnswers]=useState([]);
+      const question=QUESTIONS[currentQ];
+      const phase=getPhase(question.id);
+      const progress=((currentQ+1)/QUESTIONS.length)*100;
+      const bgStyle={background:'linear-gradient(135deg, '+phase.gradientStart+', '+phase.gradientEnd+')'};
+      const handleSelect=useCallback((optId)=>{
+        if(selected)return;
+        setSelected(optId);
+        setParticleTrig(p=>p+1);
+        const opt=question.options.find(o=>o.id===optId);
+        if(opt){
+          const ns={...scores};
+          opt.weights.forEach(w=>{ns[w.eraId]=(ns[w.eraId]||0)+w.weight;});
+          setScores(ns);
+        }
+        setAnswers(a=>[...a,optId]);
+        setTimeout(()=>{
+          setShowTrans(true);
+          setTimeout(()=>{
+            if(currentQ<QUESTIONS.length-1){
+              setCurrentQ(p=>p+1);setSelected(null);setShowTrans(false);
+            }else{
+              const result=calculateResult([...answers,optId],optId);
+              onComplete(result);
+            }
+          },800);
+        },600);
+      },[currentQ,selected,question,scores,answers,onComplete]);
+      const handleMouseMove=useCallback((e)=>{setMousePos({x:e.clientX,y:e.clientY});},[]);
+      return h('div',{className:'relative min-h-screen w-full overflow-hidden transition-all duration-1000 bg-crossfade',style:bgStyle,onMouseMove:handleMouseMove},
+        h('div',{className:getTextureClass(question.id)}),
+        h(ParticleCanvas,{isActive:particleTrig>0,mouseX:mousePos.x,mouseY:mousePos.y,phaseColor:phase.gradientEnd}),
+        h('div',{className:'fixed top-0 left-0 right-0 z-40 h-1'},
+          h(m.div,{className:'h-full bg-white/30 backdrop-blur-sm',initial:{width:0},animate:{width:progress+'%'},transition:{duration:0.5,ease:'easeOut'}})
+        ),
+        h('div',{className:'fixed top-4 left-4 z-40'},
+          h(m.div,{className:'px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/80 text-xs font-light tracking-widest uppercase',initial:{opacity:0,y:-10},animate:{opacity:1,y:0},key:phase.id},
+            'Chapter '+phase.id+': '+phase.name
+          )
+        ),
+        h('div',{className:'fixed top-4 right-4 z-40'},
+          h(m.div,{className:'text-white/60 text-sm font-mono',initial:{opacity:0},animate:{opacity:1}},
+            String(currentQ+1).padStart(2,'0')+'/'+String(QUESTIONS.length).padStart(2,'0')
+          )
+        ),
+        h('div',{className:'relative z-30 flex flex-col items-center justify-center min-h-screen px-4 sm:px-8 py-20'},
+          h(AP,null,
+            !showTrans?
+              h(m.div,{key:question.id,className:'w-full max-w-3xl mx-auto',initial:{opacity:0,y:30,filter:'blur(10px)'},animate:{opacity:1,y:0,filter:'blur(0px)'},exit:{opacity:0,y:-30,filter:'blur(10px)'},transition:{duration:0.6,ease:[0.22,1,0.36,1]}},
+                h(m.h2,{className:'text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 tracking-tight',style:{fontFamily:'Playfair Display, Georgia, serif'},initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.1,duration:0.5}},trFn(lang,'questions.'+(currentQ)+'.text')||question.title),
+                h(m.p,{className:'text-white/70 text-base sm:text-lg mb-10 leading-relaxed font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.2,duration:0.5}},question.narrative),
+                h('div',{className:'space-y-3'},
+                  question.options.map((opt,idx)=>h(m.button,{key:opt.id,onClick:()=>handleSelect(opt.id),disabled:selected!==null,
+                    className:'w-full text-left p-4 sm:p-5 rounded-xl border transition-all duration-300 '+(selected===opt.id?'bg-white/20 border-white/50 text-white shadow-lg shadow-white/10':selected!==null?'bg-white/5 border-white/10 text-white/40':'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:border-white/30 hover:shadow-lg hover:shadow-white/5'),
+                    initial:{opacity:0,x:-20},animate:{opacity:1,x:0},transition:{delay:0.3+idx*0.08,duration:0.4},whileHover:selected===null?{scale:1.01}:{},whileTap:selected===null?{scale:0.99}:{}},
+                    h('div',{className:'flex items-start gap-3 sm:gap-4'},
+                      h('span',{className:'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium '+(selected===opt.id?'bg-white/30 text-white':'bg-white/10 text-white/60')},String.fromCharCode(65+idx)),
+                      h('span',{className:'text-sm sm:text-base leading-relaxed pt-1'},trFn(lang,'questions.'+(currentQ)+'.options.'+idx)||opt.text)
+                    )
+                  ))
+                )
+              ):
+              h(m.div,{className:'flex flex-col items-center justify-center',initial:{opacity:0,scale:0.8,filter:'blur(20px)'},animate:{opacity:1,scale:1,filter:'blur(0px)'},exit:{opacity:0,scale:1.2,filter:'blur(20px)'},transition:{duration:0.6,ease:[0.22,1,0.36,1]}},
+                h(m.div,{className:'text-white/30 text-6xl mb-4',animate:{y:[0,-10,0],rotate:[0,5,-5,0]},transition:{duration:0.8,repeat:Infinity,ease:'easeInOut'}},'✦'),
+                h('p',{className:'text-white/50 text-lg font-light tracking-wider'},currentQ<QUESTIONS.length-1?trFn(lang,'ui.cont')||'The story continues...':trFn(lang,'ui.calc')||'Calculating your soul archetype...')
+              )
+          )
+        ),
+        h('div',{className:'fixed bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none opacity-20',style:{background:'radial-gradient(ellipse at center, '+phase.gradientEnd+' 0%, transparent 70%)'}})
+      );
+    }
+
+    // ===== RESULT =====
+    function Result({winningEraId,onRestart,tr:trFn,lang}){
+      const [showAnalysis,setShowAnalysis]=useState(false);
+      const era=ERAS[winningEraId]||ERAS[ERA_IDS[0]];
+      const resultData=trFn(lang,'results.'+winningEraId)||{title:era.archetype,desc:era.description,track:era.healingTrack.title};
+      return h('div',{className:'relative min-h-screen w-full overflow-hidden',style:{background:'linear-gradient(135deg, '+era.colorPrimary+', '+era.colorSecondary+')'}},
+        h('div',{className:'grain-overlay'}),
+        h('div',{className:'bg-microcosmos'}),
+        h('div',{className:'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vmin] h-[80vmin] pointer-events-none animate-soul-pulse',style:{background:'radial-gradient(circle at center, '+era.colorSecondary+'88 0%, '+era.colorPrimary+'44 40%, transparent 70%)',filter:'blur(60px)'}}),
+        h('div',{className:'fixed inset-0 pointer-events-none overflow-hidden'},
+          Array.from({length:20}).map((_,i)=>h(m.div,{key:i,className:'absolute w-1 h-1 rounded-full',style:{background:era.colorAccent,left:Math.random()*100+'%',top:Math.random()*100+'%'},
+            animate:{y:[0,-30,0],opacity:[0,0.6,0],scale:[0,1,0]},transition:{duration:3+Math.random()*4,repeat:Infinity,delay:Math.random()*5,ease:'easeInOut'}}))
+        ),
+        h('div',{className:'relative z-10 flex flex-col items-center justify-center min-h-screen px-4 sm:px-8 py-20'},
+          h(AP,null,
+            !showAnalysis?
+              h(m.div,{key:'result',className:'w-full max-w-3xl mx-auto text-center',initial:{opacity:0,scale:0.8,filter:'blur(20px)'},animate:{opacity:1,scale:1,filter:'blur(0px)'},transition:{duration:1,ease:[0.22,1,0.36,1]}},
+                h(m.div,{className:'inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/70 text-xs font-light tracking-[0.2em] uppercase mb-8',initial:{opacity:0,y:-10},animate:{opacity:1,y:0},transition:{delay:0.3,duration:0.5}},trFn(lang,'ui.result')||'Reveal Soul'),
+                h(m.h1,{className:'text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight',style:{fontFamily:'Playfair Display, Georgia, serif'},initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.5,duration:0.6}},resultData.title||era.archetype),
+                h(m.h2,{className:'text-xl sm:text-2xl text-white/60 mb-8 font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.7,duration:0.6}},era.name),
+                h(m.p,{className:'text-white/80 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-10 font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.9,duration:0.6}},resultData.desc||era.description),
+                h(m.div,{className:'flex flex-wrap justify-center gap-2 mb-12',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:1.1,duration:0.6}},
+                  era.keywords.map((kw,i)=>h('span',{key:kw,className:'px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/60 text-xs font-light'},'#'+kw))
+                ),
+                h(m.div,{className:'flex flex-col sm:flex-row gap-4 justify-center',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:1.3,duration:0.6}},
+                  h('button',{onClick:()=>setShowAnalysis(true),className:'px-8 py-3 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white font-medium hover:bg-white/30 transition-all duration-300 hover:shadow-lg hover:shadow-white/10'},trFn(lang,'ui.analysis')||'Read Soul Analysis'),
+                  h('button',{onClick:onRestart,className:'px-8 py-3 rounded-xl bg-transparent border border-white/20 text-white/70 font-light hover:bg-white/10 hover:text-white transition-all duration-300'},trFn(lang,'ui.again')||'Take the Test Again')
+                )
+              ):
+              h(m.div,{key:'analysis',className:'w-full max-w-3xl mx-auto',initial:{opacity:0,y:30,filter:'blur(10px)'},animate:{opacity:1,y:0,filter:'blur(0px)'},transition:{duration:0.8,ease:[0.22,1,0.36,1]}},
+                h('button',{onClick:()=>setShowAnalysis(false),className:'mb-8 text-white/50 hover:text-white/80 transition-colors duration-300 flex items-center gap-2 text-sm'},
+                  h('span',null,'←'),
+                  h('span',null,trFn(lang,'ui.back')||'Back to result')
+                ),
+                h(m.h2,{className:'text-2xl sm:text-3xl font-bold text-white mb-2',style:{fontFamily:'Playfair Display, Georgia, serif'},initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.1,duration:0.5}},trFn(lang,'ui.analysis')||'Soul Analysis'),
+                h(m.p,{className:'text-white/50 text-sm mb-10 font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.15,duration:0.5}},resultData.title+' · '+era.name),
+                h('div',{className:'space-y-6 mb-10'},
+                  era.analysisParagraphs.map((p,i)=>h(m.p,{key:i,className:'text-white/80 text-base leading-relaxed font-light',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.2+i*0.15,duration:0.5}},p))
+                ),
+                h(m.div,{className:'p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20',initial:{opacity:0,y:20},animate:{opacity:1,y:0},transition:{delay:0.6,duration:0.5}},
+                  h('h3',{className:'text-white/60 text-xs font-light tracking-[0.2em] uppercase mb-3'},trFn(lang,'ui.healing')||'Healing Track'),
+                  h('p',{className:'text-white text-lg font-medium mb-1'},resultData.track||era.healingTrack.title),
+                  h('p',{className:'text-white/50 text-sm mb-4'},era.healingTrack.artist),
+                  h('div',{className:'flex gap-3'},
+                    h('a',{href:era.healingTrack.youtubeUrl,target:'_blank',rel:'noopener noreferrer',className:'px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 text-white text-sm transition-all duration-300'},'▶ '+trFn(lang,'ui.youtube')||'Watch on YouTube')
+                  )
+                ),
+                h(m.div,{className:'mt-10 text-center',initial:{opacity:0},animate:{opacity:1},transition:{delay:0.8,duration:0.5}},
+                  h('button',{onClick:onRestart,className:'px-8 py-3 rounded-xl bg-white/10 border border-white/20 text-white/70 font-light hover:bg-white/20 hover:text-white transition-all duration-300'},trFn(lang,'ui.again')||'Take the Test Again')
+                )
+              )
+          )
+        )
+      );
+    }
+
+    // ===== APP =====
+    function App(){
+      const [screen,setScreen]=useState('intro');
+      const [winningEra,setWinningEra]=useState('');
+      const [lang,setLang]=useState('en');
+      const [langOpen,setLangOpen]=useState(false);
+      const [soundActive,setSoundActive]=useState(false);
+      const handleStart=useCallback(()=>setScreen('quiz'),[]);
+      const handleComplete=useCallback((eraId)=>{setWinningEra(eraId);setScreen('result');},[]);
+      const handleRestart=useCallback(()=>{setWinningEra('');setScreen('intro');},[]);
+      const trFn=tr;
+      return h('main',{className:'relative min-h-screen w-full overflow-hidden bg-black'},
+        h('div',{className:'fixed top-4 right-4 z-50 flex items-center gap-3'},
+          h('div',{style:{position:'relative',display:'inline-block'}},
+            h('svg',{viewBox:'0 0 100 100',className:'proof-logo',onClick:()=>setLangOpen(o=>!o)},
+              h('path',{d:'M25 20 L45 25 L45 75 L25 80 Z',fill:'currentColor'}),
+              h('path',{d:'M55 25 L75 20 L75 80 L55 75 Z',fill:'currentColor'})
+            ),
+            langOpen&&h('div',{className:'lang-dropdown'},
+              LANG_ORDER.map(l=>h('button',{key:l,className:'lang-dropdown-item'+(lang===l?' active':''),onClick:()=>{setLang(l);setLangOpen(false);}},
+                h('span',{className:'lang-flag'},LANG_META[l].flag),
+                h('span',null,LANG_META[l].label)
+              ))
+            )
+          ),
+          h(Soundscape,{active:soundActive,onToggle:()=>setSoundActive(s=>!s)})
+        ),
+        h(AP,null,
+          screen==='intro'&&h(IntroScreen,{key:'intro',onStart:handleStart,tr:trFn,lang}),
+          screen==='quiz'&&h(Quiz,{key:'quiz',onComplete:handleComplete,tr:trFn,lang}),
+          screen==='result'&&h(Result,{key:'result',winningEraId:winningEra,onRestart:handleRestart,tr:trFn,lang})
+        )
+      );
+    }
+
+    // ===== RENDER =====
+    const root=ReactDOM.createRoot(document.getElementById('root'));
+    root.render(h(App));
+  </script>
 </body>
 </html>
