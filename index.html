@@ -488,62 +488,47 @@
     }
 
     // ===== AUDIO PLAYER (Spring Day.mp3) =====
-    // Mobile-friendly: starts muted, unmuted on first user gesture.
-    // Volume is set directly (no slow requestAnimationFrame ramps) for instant response.
-    function AudioPlayer({active,onToggle,volumeRef}){
-      const audioRef=useRef(null);
+    // Mobile-first: audio is created once, but play() is ONLY called inside
+    // explicit user-gesture click handlers (not in useEffect).
+    // Volume is hard-coded to 1.0 immediately. No ramp loops, no fade transitions.
+    function AudioPlayer({active,onToggle,volumeRef,audioRef}){
       const [ready,setReady]=useState(false);
-      const [init,setInit]=useState(false);
-      // Create audio element once
+      // Create audio element once (shared via audioRef from parent)
       useEffect(()=>{
         if(!audioRef.current){
-          const audio=new Audio('./Spring Day.mp3');
+          const src=encodeURI('./Spring Day.mp3');
+          const audio=new Audio(src);
           audio.loop=true;
-          audio.volume=0; // start silent; unmuted on first user gesture
+          audio.volume=1.0;       // MAX volume immediately
+          audio.muted=false;      // Ensure unmuted
           audio.preload='auto';
           audioRef.current=audio;
           const onReady=()=>setReady(true);
           const onErr=()=>console.log('Spring Day.mp3 not found — audio disabled');
           audio.addEventListener('canplaythrough',onReady);
           audio.addEventListener('error',onErr);
-          // Force load
           audio.load();
         }
         return()=>{
           if(audioRef.current){audioRef.current.pause();audioRef.current=null;}
         };
       },[]);
-      // On first user gesture (toggle), initialize audio context and unmute
+      // Toggle click handler — play/pause inside user gesture
       const handleClick=useCallback(()=>{
-        // Initialize AudioContext on first user gesture (required for mobile)
-        if(!init){
-          try{
-            const ctx=new (window.AudioContext||window.webkitAudioContext)();
-            // Resume suspended context (mobile browsers)
-            if(ctx.state==='suspended')ctx.resume();
-            // Create a silent buffer source to fully unlock audio
-            const src=ctx.createBufferSource();
-            src.buffer=ctx.createBuffer(1,1,22050);
-            src.connect(ctx.destination);
-            src.start(0);
-          }catch(e){/* AudioContext not available, fall back to HTMLAudioElement */}
-          setInit(true);
+        const audio=audioRef.current;
+        if(!audio)return;
+        if(active){
+          audio.pause();
+        }else{
+          audio.volume=1.0;       // Re-assert max volume
+          audio.muted=false;
+          audio.play().catch(e=>{
+            console.error('Mobile Audio Blocked:',e);
+            console.log('Tip: If on iOS, check your physical silent switch.');
+          });
         }
         onToggle();
-      },[init,onToggle]);
-      // React to active state and volumeRef changes — set volume INSTANTLY
-      useEffect(()=>{
-        const audio=audioRef.current;
-        if(!audio||!ready)return;
-        if(active){
-          // Set volume directly to target — no slow ramp
-          const targetVol=volumeRef&&volumeRef.current!==undefined?volumeRef.current:1.0;
-          audio.volume=Math.min(targetVol,1.0);
-          audio.play().catch(()=>{});
-        }else{
-          audio.pause();
-        }
-      },[active,ready,volumeRef]);
+      },[active,onToggle,audioRef]);
       return h('button',{onClick:handleClick,className:'soundscape-btn'+(active?' active':''),title:active?'Pause Spring Day':'Play Spring Day'},
         active
           ? h('div',{className:'vinyl-icon spinning'})
@@ -797,7 +782,21 @@
       const [proofLastClick,setProofLastClick]=useState(0);
       const [showProofOverlay,setShowProofOverlay]=useState(false);
       const volumeRef=useRef(1.0);
-      const handleStart=useCallback(()=>setScreen('quiz'),[]);
+      const audioRef=useRef(null);
+      const handleStart=useCallback(()=>{
+        setScreen('quiz');
+        // Interaction-locked audio playback: unlock mobile AudioContext
+        const audio=audioRef.current;
+        if(audio){
+          audio.volume=1.0;
+          audio.muted=false;
+          audio.play().catch(e=>{
+            console.error('Mobile Audio Blocked on Start:',e);
+            console.log('Tip: If on iOS, check your physical silent switch.');
+          });
+          setSoundActive(true);
+        }
+      },[]);
       const handleComplete=useCallback((eraId)=>{
         setWinningEra(eraId);
         setScreen('result');
@@ -854,7 +853,7 @@
               ))
             )
           ),
-          h(AudioPlayer,{active:soundActive,onToggle:()=>setSoundActive(s=>!s),volumeRef})
+          h(AudioPlayer,{active:soundActive,onToggle:()=>setSoundActive(s=>!s),volumeRef,audioRef})
         ),
         h(AP,null,
           screen==='intro'&&h(IntroScreen,{key:'intro',onStart:handleStart,tr:trFn,lang}),
