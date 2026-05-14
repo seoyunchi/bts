@@ -488,50 +488,63 @@
     }
 
     // ===== AUDIO PLAYER (Spring Day.mp3) =====
+    // Mobile-friendly: starts muted, unmuted on first user gesture.
+    // Volume is set directly (no slow requestAnimationFrame ramps) for instant response.
     function AudioPlayer({active,onToggle,volumeRef}){
       const audioRef=useRef(null);
       const [ready,setReady]=useState(false);
+      const [init,setInit]=useState(false);
+      // Create audio element once
       useEffect(()=>{
         if(!audioRef.current){
           const audio=new Audio('./Spring Day.mp3');
           audio.loop=true;
-          audio.volume=0;
+          audio.volume=0; // start silent; unmuted on first user gesture
+          audio.preload='auto';
           audioRef.current=audio;
-          audio.addEventListener('canplaythrough',()=>setReady(true));
-          audio.addEventListener('error',()=>console.log('Spring Day.mp3 not found — audio disabled'));
+          const onReady=()=>setReady(true);
+          const onErr=()=>console.log('Spring Day.mp3 not found — audio disabled');
+          audio.addEventListener('canplaythrough',onReady);
+          audio.addEventListener('error',onErr);
+          // Force load
+          audio.load();
         }
         return()=>{
           if(audioRef.current){audioRef.current.pause();audioRef.current=null;}
         };
       },[]);
+      // On first user gesture (toggle), initialize audio context and unmute
+      const handleClick=useCallback(()=>{
+        // Initialize AudioContext on first user gesture (required for mobile)
+        if(!init){
+          try{
+            const ctx=new (window.AudioContext||window.webkitAudioContext)();
+            // Resume suspended context (mobile browsers)
+            if(ctx.state==='suspended')ctx.resume();
+            // Create a silent buffer source to fully unlock audio
+            const src=ctx.createBufferSource();
+            src.buffer=ctx.createBuffer(1,1,22050);
+            src.connect(ctx.destination);
+            src.start(0);
+          }catch(e){/* AudioContext not available, fall back to HTMLAudioElement */}
+          setInit(true);
+        }
+        onToggle();
+      },[init,onToggle]);
+      // React to active state and volumeRef changes — set volume INSTANTLY
       useEffect(()=>{
         const audio=audioRef.current;
         if(!audio||!ready)return;
         if(active){
-          audio.play().catch(()=>{});
-          // Smooth volume ramp to 1.0
+          // Set volume directly to target — no slow ramp
           const targetVol=volumeRef&&volumeRef.current!==undefined?volumeRef.current:1.0;
-          const ramp=()=>{
-            if(audio.volume<targetVol){
-              audio.volume=Math.min(audio.volume+0.05,targetVol);
-              requestAnimationFrame(ramp);
-            }
-          };
-          ramp();
+          audio.volume=Math.min(targetVol,1.0);
+          audio.play().catch(()=>{});
         }else{
-          // Smooth fade out
-          const fade=()=>{
-            if(audio.volume>0.01){
-              audio.volume=Math.max(audio.volume-0.05,0);
-              requestAnimationFrame(fade);
-            }else{
-              audio.pause();
-            }
-          };
-          fade();
+          audio.pause();
         }
       },[active,ready,volumeRef]);
-      return h('button',{onClick:onToggle,className:'soundscape-btn'+(active?' active':''),title:active?'Pause Spring Day':'Play Spring Day'},
+      return h('button',{onClick:handleClick,className:'soundscape-btn'+(active?' active':''),title:active?'Pause Spring Day':'Play Spring Day'},
         active
           ? h('div',{className:'vinyl-icon spinning'})
           : h('span',{className:'music-note'},'\u266B')
@@ -788,18 +801,10 @@
       const handleComplete=useCallback((eraId)=>{
         setWinningEra(eraId);
         setScreen('result');
-        // Dynamic volume transition: 1.0 -> 0.4 on "Reveal Soul"
-        volumeRef.current=0.4;
+        // Keep volume at maximum (1.0) — no reduction on result screen
+        volumeRef.current=1.0;
         const audio=document.querySelector('audio');
-        if(audio){
-          const fade=()=>{
-            if(audio.volume>0.4){
-              audio.volume=Math.max(audio.volume-0.02,0.4);
-              requestAnimationFrame(fade);
-            }
-          };
-          fade();
-        }
+        if(audio)audio.volume=1.0;
         // Start Whalien 52 timer
         setTimeout(()=>setShowWhale(true),52000);
       },[]);
@@ -817,32 +822,10 @@
           if(next>=7){
             // Show the Proof Easter Egg overlay
             setShowProofOverlay(true);
-            // Volume swell to 0.8 for 7 seconds
-            volumeRef.current=0.8;
+            // Volume stays at 1.0 (maximum) — no swell needed since already max
+            volumeRef.current=1.0;
             const audio=document.querySelector('audio');
-            if(audio){
-              const swell=()=>{
-                if(audio.volume<0.8){
-                  audio.volume=Math.min(audio.volume+0.05,0.8);
-                  requestAnimationFrame(swell);
-                }
-              };
-              swell();
-            }
-            // After 7 seconds, fade back to 0.4
-            setTimeout(()=>{
-              volumeRef.current=0.4;
-              const audio2=document.querySelector('audio');
-              if(audio2){
-                const fadeBack=()=>{
-                  if(audio2.volume>0.4){
-                    audio2.volume=Math.max(audio2.volume-0.02,0.4);
-                    requestAnimationFrame(fadeBack);
-                  }
-                };
-                fadeBack();
-              }
-            },7000);
+            if(audio)audio.volume=1.0;
             setProofClicks(0);
           }
         }else{
